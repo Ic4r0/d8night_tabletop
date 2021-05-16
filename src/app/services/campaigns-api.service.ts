@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { forkJoin, from, Observable, of } from 'rxjs';
-import { catchError, first, map, mergeMap } from 'rxjs/operators';
+import { catchError, first, map, mergeMap, tap } from 'rxjs/operators';
 import { CustomToastrService } from '../shared/custom-toastr/custom-toastr.service';
 import { Campaign } from '../store/campaigns/campaigns.model';
 import { Sheet } from '../shared/models/sheets/sheets.model';
 import { User } from '../store/users/users.model';
 import { cloneDeep } from 'lodash';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ import { cloneDeep } from 'lodash';
 export class CampaignsApiService {
 
   constructor(private afs: AngularFirestore,
+              private storage: AngularFireStorage,
               private toastr: CustomToastrService) { }
 
   public getCampaignsList(): Observable<Array<Campaign>> {
@@ -50,18 +52,34 @@ export class CampaignsApiService {
   }
 
   public removeCampaign(campaign: Campaign): Observable<Campaign> {
-    const sheetIdx: string[] = Object.keys(campaign.sheetSharing).map((idx) => idx);
-    const observables = [];
-    sheetIdx.forEach((idx) => {
-      observables.push(from(this.afs.doc(`campaigns/${idx}/sheets/${idx}`).delete()));
-    });
-    return forkJoin(observables).pipe(
-      mergeMap(() => from(this.afs.doc(`campaigns/${campaign.id}`).delete())),
-      catchError((err) => {
-        this.toastr.error(err);
-        return of(err);
-      })
-    );
+    if (!!campaign.sheetSharing) {
+      const sheetIdx: string[] = Object.keys(campaign.sheetSharing).map((idx) => idx);
+      const observables = [];
+      sheetIdx.forEach((idx) => {
+        observables.push(from(this.afs.doc(`campaigns/${idx}/sheets/${idx}`).delete()));
+      });
+      return forkJoin(observables).pipe(
+        mergeMap(() => from(this.afs.doc(`campaigns/${campaign.id}`).delete()).pipe(first())),
+        tap(() => {
+          this.storage.ref(campaign.pic).delete();
+        }),
+        catchError((err) => {
+          this.toastr.error(err);
+          return of(err);
+        })
+      );
+    } else {
+      return from(this.afs.doc(`campaigns/${campaign.id}`).delete()).pipe(
+        first(),
+        tap(() => {
+          this.storage.ref(campaign.pic).delete();
+        }),
+        catchError((err) => {
+          this.toastr.error(err);
+          return of(err);
+        })
+      );
+    }
   }
 
   public removePlayersSheets(id: string, sheetsIdx: string[]): Observable<any> {

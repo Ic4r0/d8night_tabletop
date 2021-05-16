@@ -262,7 +262,8 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
         tap(() => {
           const campaign: Campaign = {
             ...campaignToSave,
-            sheets: this.currentCampaign.sheets
+            sheets: !!this.currentCampaign?.sheets ?
+              this.currentCampaign.sheets : {}
           };
           if (!!this.currentCampaign) {
             this.store.dispatch(updateCampaign({ campaign }));
