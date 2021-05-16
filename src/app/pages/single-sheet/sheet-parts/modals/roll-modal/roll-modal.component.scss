@@ -1,0 +1,15 @@
+@import 'variables';
+
+.dice-badge {
+  background-color: $tertiary-color;
+}
+
+.dice {
+  width: 132px;
+}
+
+@media (max-width: 440px) {
+  .modifier {
+    width: 110px;
+  }
+}

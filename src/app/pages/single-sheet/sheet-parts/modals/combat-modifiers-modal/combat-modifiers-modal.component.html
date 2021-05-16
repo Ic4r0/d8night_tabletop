@@ -1,0 +1,166 @@
+
+<app-modal [container]="false" [loading]="loadingModal" #modal>
+  <div class="uk-modal-body" uk-overflow-auto>
+    <h2 class="uk-modal-title">Combat modifiers</h2>
+    <div *ngIf="abilitiesEdited"
+      class="uk-text-warning uk-text-small uk-flex uk-flex-middle uk-margin-small-top">
+      <span uk-icon="warning" class="uk-margin-small-left uk-margin-small-right"></span>
+      <ul class="uk-list">
+        <li *ngIf="strDiff !== '0'">
+          STR variation: {{strDiff}}
+        </li>
+        <li *ngIf="dexDiff !== '0'">
+          DEX variation: {{dexDiff}}
+        </li>
+      </ul>
+    </div>
+    <div *ngIf="combatModifiers.conditionalModifiers"
+      class="uk-text-small uk-flex uk-flex-center uk-margin-small-top">
+      <ul class="uk-list uk-list-disc">
+        <li *ngFor="let conditionalMod of combatModifiers.conditionalModifiers">
+          {{conditionalMod}}
+        </li>
+      </ul>
+    </div>
+    <div class="uk-flex uk-flex-center uk-flex-middle uk-margin-top uk-margin-bottom">
+      <span class="uk-margin-right uk-text-small">BAB</span>
+      <span class="uk-text-small">{{bab}}</span>
+    </div>
+    <form [formGroup]="tempModifiers">
+      <div class="uk-flex uk-flex-center">
+        <table class="uk-table uk-table-small uk-table-middle uk-table-justify uk-table-divider uk-width-1-1">
+          <thead>
+            <tr>
+              <th class="uk-text-small name-col"></th>
+              <th class="uk-text-small uk-text-truncate uk-table-shrink" uk-tooltip="Total">
+                <span class="uk-flex uk-flex-center">
+                  Total
+                </span>
+              </th>
+              <th class="uk-text-small uk-table-shrink uk-visible@s" uk-tooltip="BAB">
+                <span class="uk-flex uk-flex-center">
+                  BAB
+                </span>
+              </th>
+              <th class="uk-text-small uk-text-truncate uk-table-shrink uk-visible@s" uk-tooltip="Ability">
+                <span class="uk-flex uk-flex-center">
+                  Ability
+                </span>
+              </th>
+              <th class="uk-text-small uk-table-shrink uk-visible@s" uk-tooltip="Misc">
+                <span class="uk-flex uk-flex-center">
+                  Misc
+                </span>
+              </th>
+              <th class="uk-text-small uk-table-shrink" uk-tooltip="Temp">Temp</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="uk-text-small uk-text-uppercase uk-text-truncate">Melee</td>
+              <td class="uk-text-small uk-text-center">
+                {{
+                  combatModifiers.melee.babBonus +
+                  combatModifiers.melee.modStat +
+                  combatModifiers.melee.modSize +
+                  combatModifiers.melee.modMisc +
+                  combatModifiers.melee.modTemp
+                }}
+              </td>
+              <td class="uk-text-small uk-text-center uk-visible@s">{{ combatModifiers.melee.babBonus }}</td>
+              <td class="uk-text-small uk-text-center uk-visible@s">{{ combatModifiers.melee.modStat }}</td>
+              <td class="uk-text-small uk-text-center uk-visible@s">
+                {{
+                  combatModifiers.melee.modSize +
+                  combatModifiers.melee.modMisc
+                }}
+              </td>
+              <td>
+                <input class="uk-input uk-border-rounded" type="number" formControlName="melee"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-uppercase uk-text-truncate">Ranged</td>
+              <td class="uk-text-small uk-text-center">
+                {{
+                  combatModifiers.ranged.babBonus +
+                  combatModifiers.ranged.modStat +
+                  combatModifiers.ranged.modSize +
+                  combatModifiers.ranged.modMisc +
+                  combatModifiers.ranged.modTemp
+                }}
+              </td>
+              <td class="uk-text-small uk-text-center uk-visible@s">{{ combatModifiers.ranged.babBonus }}</td>
+              <td class="uk-text-small uk-text-center uk-visible@s">{{ combatModifiers.ranged.modStat }}</td>
+              <td class="uk-text-small uk-text-center uk-visible@s">
+                {{
+                  combatModifiers.ranged.modSize +
+                  combatModifiers.ranged.modMisc
+                }}
+              </td>
+              <td>
+                <input class="uk-input uk-border-rounded" type="number" formControlName="ranged"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-uppercase uk-text-truncate">Cmb</td>
+              <td class="uk-text-small uk-text-center">
+                {{
+                  combatModifiers.cmb.babBonus +
+                  combatModifiers.cmb.modStat +
+                  combatModifiers.cmb.modSize +
+                  combatModifiers.cmb.modMisc +
+                  combatModifiers.cmb.modTemp
+                }}
+              </td>
+              <td class="uk-text-small uk-text-center uk-visible@s">{{ combatModifiers.cmb.babBonus }}</td>
+              <td class="uk-text-small uk-text-center uk-visible@s">{{ combatModifiers.cmb.modStat }}</td>
+              <td class="uk-text-small uk-text-center uk-visible@s">
+                {{
+                  combatModifiers.cmb.modSize +
+                  combatModifiers.cmb.modMisc
+                }}
+              </td>
+              <td>
+                <input class="uk-input uk-border-rounded" type="number" formControlName="cmb"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-uppercase uk-text-truncate">Cmd</td>
+              <td class="uk-text-small uk-text-center">
+                {{
+                  combatModifiers.cmd.total +
+                  combatModifiers.cmd.modTemp
+                }}
+              </td>
+              <td class="uk-text-small uk-text-center uk-visible@s">-</td>
+              <td class="uk-text-small uk-text-center uk-visible@s">-</td>
+              <td class="uk-text-small uk-text-center uk-visible@s">-</td>
+              <td>
+                <input class="uk-input uk-border-rounded" type="number" formControlName="cmd"/>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+    <div *ngIf="checkDifferences()" class="uk-margin-top uk-grid-small uk-child-width-1-2@s" uk-grid>
+      <div>
+        <button
+          class="uk-align-center uk-button uk-button-default uk-border-rounded uk-modal-close uk-width-1-1"
+          type="button"
+          (click)="resetTable()">
+          Cancel
+        </button>
+      </div>
+      <div>
+        <button
+          class="uk-align-center uk-button uk-button-primary uk-border-rounded uk-width-1-1"
+          type="button"
+          (click)="editMods()">
+          Edit
+        </button>
+      </div>
+    </div>
+  </div>
+</app-modal>

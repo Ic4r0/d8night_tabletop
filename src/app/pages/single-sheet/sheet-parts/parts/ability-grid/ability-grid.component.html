@@ -1,0 +1,40 @@
+<div class="uk-child-width-1-2@s uk-grid-small uk-grid-match" uk-grid>
+    <div>
+        <div class="uk-child-width-1-3 uk-text-center uk-grid-small uk-grid-match" uk-grid>
+            <div *ngFor="let ability of (abilitiesText | slice:0:3)">
+                <div class="uk-card uk-card-default uk-border-rounded uk-padding-small uk-flex uk-flex-column uk-flex-center">
+                    <div class="uk-text-meta uk-text-small uk-text-uppercase">
+                        {{ability.abbr}}
+                    </div>
+                    <h4 class="uk-margin-small-top uk-margin-small-bottom clickable"
+                        (click)="diceRoll.rollD20(1, abilities[ability.name].text, ability.name)"
+                        [ngClass]="{'uk-text-warning': abilities[ability.name].edited}">
+                        {{abilities[ability.name].text}}
+                    </h4>
+                    <div class="uk-text-bolder uk-border-pill clickable" (click)="onOpenAbilityScoresModal()">
+                        {{abilities[ability.name].score}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="uk-child-width-1-3 uk-text-center uk-grid-small uk-grid-match" uk-grid>
+            <div *ngFor="let ability of (abilitiesText | slice:3:6)">
+                <div class="uk-card uk-card-default uk-border-rounded uk-padding-small uk-flex uk-flex-column uk-flex-center">
+                    <div class="uk-text-meta uk-text-small uk-text-uppercase">
+                        {{ability.abbr}}
+                    </div>
+                    <h4 class="uk-margin-small-top uk-margin-small-bottom clickable"
+                        (click)="diceRoll.rollD20(1, abilities[ability.name].text, ability.name)"
+                        [ngClass]="{'uk-text-warning': abilities[ability.name].edited}">
+                        {{abilities[ability.name].text}}
+                    </h4>
+                    <div class="uk-text-bolder uk-border-pill clickable" (click)="onOpenAbilityScoresModal()">
+                        {{abilities[ability.name].score}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

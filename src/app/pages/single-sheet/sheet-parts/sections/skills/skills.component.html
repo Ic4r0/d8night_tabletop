@@ -1,0 +1,42 @@
+<div class="uk-card uk-card-default uk-border-rounded uk-padding-small uk-flex
+    uk-flex-column uk-flex-center uk-flex-between">
+    <table class="uk-table uk-table-small uk-table-justify uk-table-divider uk-width-1-1">
+        <thead>
+            <tr>
+                <th class="uk-table-shrink uk-text-small">T</th>
+                <th class="uk-table-shrink uk-text-small">Ability</th>
+                <th class="uk-width-auto uk-text-small">Skill</th>
+                <th class="uk-table-shrink uk-text-small">Mod</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let skill of skills">
+                <td class="uk-text-small">{{ skill.trained ? '●' : '○'}}</td>
+                <td class="uk-text-small uk-text-uppercase uk-text-center">{{ skill.ability }}</td>
+                <td class="uk-text-small uk-text-truncate clickable" (click)="onSelectedSkill(skill.name)"
+                    [attr.uk-tooltip]="skill.name">
+                    {{ skill.name }}
+                </td>
+                <td class="uk-text-small uk-text-bold uk-text-center clickable"
+                    [ngClass]="{'uk-text-warning': skill.edited}"
+                    (click)="rollDice.rollD20(1, skill.total, skill.name)">
+                    {{ skill.text }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div
+        class="uk-flex uk-flex-center uk-flex-middle uk-text-bolder uk-text-center uk-text-uppercase uk-margin-small-top">
+        <span>Skills</span>
+        <span class="clickable uk-margin-small-left" uk-icon="icon: cog; ratio: 0.8"
+          (click)="onOpenSkillsModal()"></span>
+          <span class="clickable uk-margin-small-left" uk-icon="info"
+            *ngIf="!!modifiers"
+            (click)="skillsModsModal.show()"></span>
+    </div>
+</div>
+
+<app-skill-modifiers-modal
+  [modifiers]="modifiers"
+  #skillsModsModal
+></app-skill-modifiers-modal>

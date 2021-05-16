@@ -1,0 +1,12 @@
+@import 'variables';
+
+.custom-footer {
+  position: static;
+  bottom: 0;
+  height: 60px;
+  background-color: $base-color;
+}
+
+.button-text {
+  font-size: 0.65rem;
+}

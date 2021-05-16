@@ -1,0 +1,161 @@
+<div [ngClass]="{'not-desktop uk-padding-small uk-card uk-card-default uk-border-rounded': tablet || mobile}" class="uk-width-1-1 uk-text-small">
+    <div *ngIf="mobile || tablet" class="uk-text-center uk-text-bolder uk-text-uppercase uk-margin-small-bottom">
+      Feats & Traits
+    </div>
+    <div uk-filter="target: .js-filter">
+        <ul class="uk-subnav uk-subnav-pill">
+            <li class="uk-active" uk-filter-control><a href="#">All</a></li>
+            <li uk-filter-control="[data-tag='other']"><a href="#">Class & Racial features</a></li>
+            <li *ngIf="!!archetypes" uk-filter-control="[data-tag='archetypes']"><a href="#">Archetypes</a></li>
+            <li uk-filter-control="[data-tag='feats']"><a href="#">Feats</a></li>
+            <li uk-filter-control="[data-tag='traits']"><a href="#">Traits</a></li>
+        </ul>
+        <ul class="js-filter uk-child-width-1-1" uk-grid>
+            <li data-tag="other">
+                <div class="uk-flex uk-flex-column">
+                    <span class="uk-text-uppercase uk-text-bolder uk-margin-small-bottom">
+                        Class & Racial features
+                    </span>
+                    <div class="uk-flex uk-flex-column">
+                        <div
+                            *ngFor="let singleCheckList of checkLists"
+                            class="uk-flex uk-flex-column">
+                            <span class="uk-text-uppercase uk-text-bold">
+                                {{ singleCheckList.name }}
+                            </span>
+                            <span class="uk-flex uk-flex-center">
+                                <app-multiple-checkboxes
+                                    [quantity]="singleCheckList.checkCount"
+                                    [selected]="singleCheckList.checked"
+                                    [text]="singleCheckList.checkType"
+                                    (ticks)="onCheckboxChange(singleCheckList, $event)"
+                                ></app-multiple-checkboxes>
+                            </span>
+                            <span *ngIf="!!singleCheckList.description">
+                                {{ singleCheckList.description }}
+                            </span>
+                            <ul *ngIf="!!singleCheckList.subability" class="uk-margin-remove-vertical uk-list uk-list-collapse uk-list-disc">
+                                <li *ngFor="let singleAbility of singleCheckList.subability"
+                                    class="uk-flex uk-flex-column">
+                                    <span class="uk-text-uppercase uk-text-bold">
+                                        {{ singleAbility.name }}
+                                    </span>
+                                    <span *ngIf="!!singleAbility.description">
+                                        {{ singleAbility.description }}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div
+                            *ngFor="let singleQuality of specialQualities"
+                            class="uk-flex uk-flex-column">
+                            <span class="uk-text-uppercase uk-text-bold">
+                                {{ singleQuality.name }}
+                            </span>
+                            <span *ngIf="!!singleQuality.description">
+                                {{ singleQuality.description }}
+                            </span>
+                        </div>
+                        <div *ngIf="!checkLists && !specialQualities">
+                            <span class="uk-text-italic">
+                              There are no special qualities for this PC
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li *ngIf="!!archetypes" data-tag="archetypes">
+                <div class="uk-flex uk-flex-column">
+                    <span class="uk-text-uppercase uk-text-bolder uk-margin-small-bottom">
+                        Archetypes
+                    </span>
+                    <div class="uk-flex uk-flex-column">
+                        <div
+                            *ngFor="let singleArchetype of archetypes"
+                            class="uk-flex uk-flex-column">
+                            <span class="uk-text-uppercase uk-text-bold">
+                                {{ singleArchetype.name }}
+                            </span>
+                            <span>
+                                {{ singleArchetype.description }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li data-tag="feats">
+                <div class="uk-flex uk-flex-column">
+                    <span class="uk-text-uppercase uk-text-bolder uk-margin-small-bottom">
+                        Feats
+                    </span>
+                    <div *ngIf="featsList?.length > 0; else noFeats" class="uk-flex uk-flex-column">
+                        <div
+                            *ngFor="let singleFeat of featsList"
+                            class="uk-flex uk-flex-column">
+                            <span class="uk-text-uppercase uk-text-bold">
+                                {{ singleFeat.name }}
+                            </span>
+                            <ul class="uk-list uk-list-collapse uk-margin-remove-vertical">
+                                <li>
+                                    <span class="uk-text-uppercase">
+                                        Description:
+                                    </span>
+                                    <span>
+                                        {{ singleFeat.description }}
+                                    </span>
+                                </li>
+                                <li *ngIf="!!singleFeat.benefit">
+                                    <span class="uk-text-uppercase">
+                                        Benefit:
+                                    </span>
+                                    <span>
+                                        {{ singleFeat.benefit }}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <ng-template #noFeats>
+                        <span class="uk-text-italic">
+                          There are no feats for this PC
+                        </span>
+                    </ng-template>
+                </div>
+            </li>
+            <li data-tag="traits">
+                <div class="uk-flex uk-flex-column">
+                    <span class="uk-text-uppercase uk-text-bolder uk-margin-small-bottom">
+                        Traits
+                    </span>
+                    <div *ngIf="traits?.length > 0; else noTraits" class="uk-flex uk-flex-column">
+                        <div
+                            *ngFor="let singleTrait of traits"
+                            class="uk-flex uk-flex-column">
+                            <span class="uk-text-uppercase uk-text-bold">
+                                {{ singleTrait.name }}
+                            </span>
+                            <ul class="uk-list uk-list-collapse uk-margin-remove-vertical">
+                                <li>
+                                    <span class="uk-text-uppercase">
+                                        Description:
+                                    </span>
+                                    <span>
+                                        {{ singleTrait.description }}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <ng-template #noTraits>
+                        <span class="uk-text-italic">
+                            There are no traits for this PC
+                        </span>
+                    </ng-template>
+                </div>
+            </li>
+        </ul>
+
+    </div>
+</div>
+
+<app-loading-overlay [loading]="loading"></app-loading-overlay>

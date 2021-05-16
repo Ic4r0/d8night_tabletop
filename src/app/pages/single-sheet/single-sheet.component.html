@@ -1,0 +1,238 @@
+<div class="page page-with-footer" (window:resize)="onResize($event)">
+
+  <!-- BREADCRUMB -->
+  <app-breadcrumb [list]="breadcrumb"></app-breadcrumb>
+
+  <div *ngIf="!!currentSheet"
+    class="uk-width-1-1 uk-width-5-6@s uk-align-center"
+    [ngClass]="{'uk-padding-small uk-padding-remove-vertical': mobileView}">
+
+    <!-- HOVERING BOTTOM BUTTONS -->
+    <app-hovering-buttons
+      (roll)="roll.show()"
+      (section)="sectionsModal.show()"
+    ></app-hovering-buttons>
+
+    <div class="uk-flex uk-flex-column">
+      <!-- BLACK SHEET HEADER FIRST ROW -->
+      <app-sheet-header
+        [sheet]="currentSheet"
+        [currentHp]="currentHp"
+        [maxHp]="maxHp"
+        (conditions)="conditionsModal.show()"
+        (rest)="restModal.show()"
+        (hitPoints)="openHPModal()"
+      ></app-sheet-header>
+
+      <!-- BLACK SHEET HEADER SECOND ROW (ONLY TABLET AND MOBILE)
+      Tablet: Movement, Initiative, AC, Defense, Vision
+      Mobile: Movement, Initiative, AC, Defense, Vision (2 rows) -->
+      <app-mobile-fixed-info
+        [tablet]="tabletView"
+        [mobile]="mobileView"
+        [walk]="walkMovement"
+        [initiative]="initiativeValue"
+        [ac]="ac"
+        [defenses]="currentSheet.protection.resistances"
+        [senses]="currentSheet.vision"
+        (movementsModal)="movements.show()"
+        (initiativeModal)="initiativeModal.show()"
+        (armorClassModal)="acModal.show()"
+        (defensesSensesModal)="openDoubleSectionDescrModal('defensesSenses')"
+      ></app-mobile-fixed-info>
+
+      <div [ngSwitch]="selectedSection">
+        <div *ngSwitchCase="'general'">
+          <app-general
+            [campaign]="currentCampaign"
+            [sheetId]="currentSheetId"
+            [tablet]="tabletView"
+            [mobile]="mobileView"
+            [abilities]="abilities"
+            [walk]="walkMovement"
+            [(newHpValue)]="newHpValue"
+            [currentHp]="currentHp"
+            [maxHp]="maxHp"
+            [tempHp]="tempHp"
+            [saves]="saves"
+            [combat]="combat"
+            [conditionalMods]="!!currentSheet.combat.attacks.conditionalModifiers"
+            [proficiencies]="currentSheet.combat.weapons.proficiencies"
+            [languages]="currentSheet.languages"
+            [skills]="skills"
+            [initiative]="initiativeValue"
+            [ac]="ac"
+            [defenses]="currentSheet.protection.resistances"
+            [senses]="currentSheet.vision"
+            [sheet]="currentSheet"
+            (abilityScoresModal)="abilityScoresModal.show()"
+            (movementsModal)="movements.show()"
+            (changeHP)="changeHP($event)"
+            (hpModal)="openHPModal()"
+            (savesModal)="savesModal.show()"
+            (combatModsModal)="combatMods.show()"
+            (profLangModal)="openDoubleSectionDescrModal('proficienciesLanguages')"
+            (selectSkill)="selectSkill($event)"
+            (skillsModal)="displaySkills.show()"
+            (initiativeModal)="initiativeModal.show()"
+            (acModal)="acModal.show()"
+            (defSensesModal)="openDoubleSectionDescrModal('defensesSenses')"
+          ></app-general>
+        </div>
+        <div *ngSwitchCase="'skills'">
+          <app-skills
+            [skills]="skills"
+            [modifiers]="currentSheet.skills.conditionalModifiers"
+            (selected)="selectSkill($event)"
+            (skillsModal)="displaySkills.show()"
+          ></app-skills>
+        </div>
+        <div *ngSwitchCase="'actions'">
+          <app-actions
+            [campaign]="currentCampaign?.id"
+            [sheet]="currentSheetId"
+            [bab]="currentSheet?.combat?.bab"
+            [unarmed]="currentSheet?.combat?.weapons?.unarmed"
+            [weapons]="currentSheet?.combat?.weapons?.weapon"
+            [specialAttacks]="currentSheet?.specialAttacks"
+            [tablet]="tabletView"
+            [mobile]="mobileView"
+          ></app-actions>
+        </div>
+        <div *ngSwitchCase="'spells'">
+          <app-spells
+            [campaign]="currentCampaign?.id"
+            [sheet]="currentSheetId"
+            [spells]="currentSheet?.spells"
+            [tablet]="tabletView"
+            [mobile]="mobileView"
+          ></app-spells>
+        </div>
+        <div *ngSwitchCase="'equipment'">
+          <app-equipment
+            [equipment]="currentSheet?.gear"
+            [tablet]="tabletView"
+            [mobile]="mobileView"
+            [campaign]="currentCampaign?.id"
+            [sheet]="currentSheetId"
+          ></app-equipment>
+        </div>
+        <div *ngSwitchCase="'featsAndTraits'">
+          <app-feats-traits
+            [mobile]="mobileView"
+            [tablet]="tabletView"
+            [checkLists]="currentSheet?.checkLists"
+            [archetypes]="currentSheet?.archetypes"
+            [specialQualities]="currentSheet?.specialQualities"
+            [feats]="currentSheet?.feats"
+            [traits]="currentSheet?.traits"
+          ></app-feats-traits>
+        </div>
+        <div *ngSwitchCase="'description'">
+          <app-descriptions
+            [alignment]="currentSheet?.alignment"
+            [info]="currentSheet?.info"
+            [deity]="currentSheet?.deity"
+            [tablet]="tabletView"
+            [mobile]="mobileView"
+          ></app-descriptions>
+        </div>
+        <div *ngSwitchCase="'extras'">
+          <app-extras
+            [sheet]="currentSheetId"
+            [campaign]="currentCampaign"
+            [notes]="currentSheet?.notes"
+            [tablet]="tabletView"
+            [mobile]="mobileView"
+          ></app-extras>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<app-loading-overlay [loading]="loading"></app-loading-overlay>
+
+<app-mobile-footer
+  class="uk-hidden@s"
+  [buttons]="footerButtons"
+  (label)="onFooterClicked($event)"
+></app-mobile-footer>
+
+<app-display-skills-modal
+  [display]="displayedSkills"
+  [totalSkills]="totalSkills"
+  [campaign]="currentCampaign?.id"
+  [sheet]="currentSheetId"
+  #displaySkills
+></app-display-skills-modal>
+
+<app-roll-modal #roll></app-roll-modal>
+
+<app-ability-scores-modal #abilityModal></app-ability-scores-modal>
+
+<app-movement-modal [movement]="currentSheet?.movement" #movements></app-movement-modal>
+
+<app-double-section-descr-modal
+  [above]="aboveDescription"
+  [below]="belowDescription"
+  #doubleSectionDescr
+></app-double-section-descr-modal>
+
+<app-single-skill-modal
+  [skill]="selectedSkill"
+  [campaign]="currentCampaign?.id"
+  [sheet]="currentSheetId"
+  #singleSkill
+></app-single-skill-modal>
+
+<app-saves-modal #savesModal></app-saves-modal>
+
+<app-combat-modifiers-modal #combatMods></app-combat-modifiers-modal>
+
+<app-initiative-modal
+  [campaign]="currentCampaign?.id"
+  [sheet]="currentSheetId"
+  [initiative]="initiative"
+  #initiativeModal
+></app-initiative-modal>
+
+<app-armor-class-modal
+  [campaign]="currentCampaign?.id"
+  [sheet]="currentSheetId"
+  [armorClass]="acValue"
+  #acModal
+></app-armor-class-modal>
+
+<app-hit-points-modal
+  [campaign]="currentCampaign?.id"
+  [sheet]="currentSheetId"
+  [hitPoints]="hpValue"
+  [constitution]="constitutionValues"
+  (hp)="onModalChangeHP($event)"
+  #hpModal
+></app-hit-points-modal>
+
+<app-rest-modal
+  [campaignId]="currentCampaign?.id"
+  [sheetId]="currentSheetId"
+  [maxHp]="maxHp"
+  [currentHp]="currentHp"
+  [sheet]="currentSheet"
+  #restModal
+></app-rest-modal>
+
+<app-conditions-modal
+  [campaign]="currentCampaign?.id"
+  [sheet]="currentSheetId"
+  [conditions]="currentSheet?.conditions"
+  #conditionsModal
+></app-conditions-modal>
+
+<app-section-change-modal
+  [mobile]="mobileView"
+  (section)="onSectionChange($event)"
+  #sectionsModal
+></app-section-change-modal>

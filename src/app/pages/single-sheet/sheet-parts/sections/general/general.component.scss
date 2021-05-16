@@ -1,0 +1,86 @@
+@import 'variables';
+
+.uk-card.uk-card-default.uk-border-rounded {
+    border: 2px solid $tertiary-color;
+}
+
+.input-block {
+    width: 120px;
+}
+
+.hp-input {
+    width: 60px;
+}
+
+.temp-block {
+  display: block;
+}
+
+@media (max-width: 1164px) {
+  .temp-block {
+    display: none;
+  }
+}
+
+.fill-height {
+  flex-grow: 1;
+}
+
+.sections-list li {
+  height: 568px;
+  overflow-y: auto;
+}
+
+@media (max-width: 1676px) and (min-width: 1636px) {
+  .sections-list li {
+    height: 580px;
+  }
+}
+
+@media (max-width: 1635px) and (min-width: 1488px) {
+  .sections-list li {
+    height: 548px;
+  }
+}
+
+@media (max-width: 1487px) and (min-width: 1467px) {
+  .sections-list li {
+    height: 569px;
+  }
+}
+
+@media (max-width: 1466px) and (min-width: 1420px) {
+  .sections-list li {
+    height: 558px;
+  }
+}
+
+@media (max-width: 1419px) and (min-width: 1261px) {
+  .sections-list li {
+    height: 582px;
+  }
+}
+
+@media (max-width: 1260px) and (min-width: 1244px) {
+  .sections-list li {
+    height: 606px;
+  }
+}
+
+@media (max-width: 1243px) and (min-width: 1034px) {
+  .sections-list li {
+    height: 630px;
+  }
+}
+
+@media (max-width: 1033px) and (min-width: 1030px) {
+  .sections-list li {
+    height: 651px;
+  }
+}
+
+@media (max-width: 1029px) and (min-width: 960px) {
+  .sections-list li {
+    height: 672px;
+  }
+}

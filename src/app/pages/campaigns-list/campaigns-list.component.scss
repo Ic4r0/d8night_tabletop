@@ -1,0 +1,32 @@
+@import 'variables';
+
+.star-filter, .star-filter-selected{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border-style: none;
+}
+
+.star-filter {
+  box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.25),
+              -1px -1px 3px 0 rgba(255, 255, 255, 0.3);
+}
+
+.star-filter:hover {
+  box-shadow: -1px -1px 3px rgba(255, 255, 255, 0.1),
+              -2px -2px 6px rgba(0, 0, 0, 0.8),
+              inset -2px -2px 10px rgba(255, 255, 255, 0.05),
+              inset 2px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.star-filter-selected {
+  color: $tertiary-color;
+  box-shadow: 1px 1px 3px 0 rgba(255, 255, 255, 0.3) inset,
+              -2px -2px 4px 0 rgba(0, 0, 0, .8) inset;
+  text-shadow: 0 0 5px $tertiary-color,
+               0 0 20px $tertiary-color;
+}
+
+.star-filter-selected:hover {
+  color: $tertiary-color;
+}

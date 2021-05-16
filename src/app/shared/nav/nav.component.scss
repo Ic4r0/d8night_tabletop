@@ -1,0 +1,14 @@
+@import 'variables';
+
+nav {
+  z-index: 2;
+  height: 80px;
+}
+
+.login-toggle {
+  padding: 0px 15px;
+}
+
+.uk-offcanvas-bar, .navbar {
+  background-color: $base-color;
+}

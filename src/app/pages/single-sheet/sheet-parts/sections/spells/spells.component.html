@@ -1,0 +1,263 @@
+<div *ngIf="!!spellsList"
+  [ngClass]="{'not-desktop uk-padding-small uk-card uk-card-default uk-border-rounded': tablet || mobile}"
+  class="uk-width-1-1 uk-text-small">
+  <div *ngIf="mobile || tablet" class="uk-text-center uk-text-bolder uk-text-uppercase uk-margin-small-bottom">
+    Spells
+  </div>
+  <div uk-filter="target: .js-filter">
+    <ul class="uk-subnav uk-subnav-pill">
+      <li class="uk-active" uk-filter-control><a href="#">All</a></li>
+      <li uk-filter-control="[data-tag='racial']" *ngIf="racialSpells.length > 0">
+        <a href="#">Racial</a>
+      </li>
+      <li uk-filter-control="[data-tag='class']" *ngIf="innateClassSpells.length > 0">
+        <a href="#">Class</a>
+      </li>
+      <li [attr.uk-filter-control]="'[data-tag=\'' + className + '\']'"
+        *ngFor="let className of classesNames">
+        <a href="#">{{className}}</a>
+      </li>
+    </ul>
+      <ul class="js-filter uk-child-width-1-1" uk-grid>
+        <li *ngIf="racialSpells.length > 0" data-tag="racial">
+          <div class="uk-flex uk-flex-column">
+            <span class="uk-text-uppercase uk-text-bolder uk-margin-small-bottom">
+              Racial spells
+            </span>
+            <div class="uk-search uk-search-default uk-margin-small-top uk-width-1-1">
+              <span class="uk-search-icon-flip" uk-search-icon></span>
+              <input class="uk-search-input uk-border-rounded" type="search" placeholder="Search..."
+                (keyup)="filterSpells($event, 'racial')">
+            </div>
+            <table *ngIf="racialSpellsFiltered.length > 0; else noSpellsForThisFilter"
+                class="uk-table uk-table-small uk-table-justify uk-table-middle uk-table-divider uk-width-1-1 uk-text-small">
+              <thead>
+                <tr>
+                  <th class="uk-table-shrink"></th>
+                  <th>Name</th>
+                  <th class="uk-width-small">Range</th>
+                  <th class="uk-width-small">DC</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let racialSpell of racialSpellsFiltered">
+                  <td>
+                    <a class="uk-icon-button uk-invisible uk-preserve-width"
+                      uk-icon="play-circle"></a>
+                  </td>
+                  <td class="clickable" (click)="onSelectSpell(racialSpell)">
+                    {{ racialSpell.name }}
+                  </td>
+                  <td>{{ !!racialSpell.range ? racialSpell.range : '-' }}</td>
+                  <td>{{ !!racialSpell.dc ? racialSpell.dc : '-' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </li>
+        <li *ngIf="innateClassSpells.length > 0" data-tag="class">
+          <div class="uk-flex uk-flex-column">
+            <span class="uk-text-uppercase uk-text-bolder uk-margin-small-bottom">
+              Innate class spells
+            </span>
+            <div class="uk-search uk-search-default uk-margin-small-top uk-width-1-1">
+                <span class="uk-search-icon-flip" uk-search-icon></span>
+                <input class="uk-search-input uk-border-rounded" type="search" placeholder="Search..."
+                  (keyup)="filterSpells($event, 'innateClass')">
+            </div>
+            <table *ngIf="innateClassSpellsFiltered.length > 0; else noSpellsForThisFilter"
+              class="uk-table uk-table-small uk-table-justify uk-table-middle uk-table-divider uk-width-1-1 uk-text-small">
+              <thead>
+                <tr>
+                  <th class="uk-table-shrink"></th>
+                  <th>Name</th>
+                  <th class="uk-width-small">Range</th>
+                  <th class="uk-width-small">DC</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let innateClassSpell of innateClassSpellsFiltered">
+                  <td>
+                    <a class="uk-icon-button uk-invisible uk-preserve-width"
+                      uk-icon="play-circle"></a>
+                  </td>
+                  <td class="clickable" (click)="onSelectSpell(innateClassSpell)">
+                    {{ innateClassSpell.name }}
+                  </td>
+                  <td>{{ !!innateClassSpell.range ? innateClassSpell.range : '-' }}</td>
+                  <td>{{ !!innateClassSpell.dc ? innateClassSpell.dc : '-' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </li>
+        <li *ngFor="let className of classesNames" [attr.data-tag]="className">
+          <div class="uk-flex uk-flex-column">
+            <div class="uk-flex uk-flex-middle">
+              <span class="uk-text-uppercase uk-text-bolder">
+                {{className}}
+              </span>
+              <a
+                *ngIf="classSpellsAttributes[className]?.memorize"
+                class="uk-icon-button uk-preserve-width uk-margin-left"
+                uk-icon="star"
+                uk-tooltip="Prepare spells"
+                (click)="prepareSpells(className)"
+              ></a>
+              <a
+                *ngIf="classSpellsAttributes[className]?.memorize"
+                class="uk-icon-button uk-preserve-width uk-margin-small-left"
+                uk-icon="refresh"
+                uk-tooltip="Reset"
+                (click)="resetSpells(className)"
+              ></a>
+            </div>
+            <span class="uk-text-small uk-text-italic" *ngIf="className === 'NA'; else validClasses">
+              This PC can not cast any spell.
+            </span>
+            <ng-template #validClasses>
+              <div *ngIf="classSpellsByLevelFiltered[className].length > 0"
+                  class="uk-search uk-search-default uk-margin-small-top uk-width-1-1">
+                <span class="uk-search-icon-flip" uk-search-icon></span>
+                <input class="uk-search-input uk-border-rounded" type="search" placeholder="Search..."
+                  (keyup)="filterSpells($event, 'class', className)">
+              </div>
+              <table class="uk-table uk-table-small uk-table-justify uk-table-middle uk-table-divider uk-width-1-1 uk-text-small uk-margin-small-bottom">
+                <thead>
+                  <tr>
+                    <th class="uk-width-1-3">
+                      <span class="uk-flex uk-flex-center">
+                        Caster Level
+                      </span>
+                    </th>
+                    <th class="uk-width-1-3">
+                      <span class="uk-flex uk-flex-center">
+                        Caster Type
+                      </span>
+                    </th>
+                    <th class="uk-width-1-3">
+                      <span class="uk-flex uk-flex-center">
+                        Concentration
+                      </span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <span class="uk-flex uk-flex-center">
+                        {{classSpellsAttributes[className].casterLevel}}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="uk-flex uk-flex-center">
+                        {{classSpellsAttributes[className].casterType}}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="uk-flex uk-flex-center">
+                        {{classSpellsAttributes[className].concentration}}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div *ngIf="classSpellsByLevelFiltered[className].length > 0" class="uk-overflow-auto">
+                <table class="uk-table uk-table-small uk-table-justify uk-table-middle uk-table-divider uk-width-1-1 uk-text-small uk-margin-small-bottom">
+                  <thead>
+                    <tr>
+                      <th>
+                        Level
+                      </th>
+                      <th *ngFor="let classSpells of classSpellsByLevelFiltered[className]">
+                        <span class="uk-flex uk-flex-center">
+                          {{classSpells.info.number}}
+                        </span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="uk-text-uppercase">
+                        Spells left per day
+                      </td>
+                      <td *ngFor="let classSpells of classSpellsByLevelFiltered[className]">
+                        <span class="uk-flex uk-flex-center">
+                          {{classSpells.info.cast - classSpells.info.casted}}
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="uk-flex uk-flex-column"
+                *ngFor="let classSpells of classSpellsByLevelFiltered[className]">
+                <div class="uk-flex uk-flex-middle uk-flex-wrap uk-flex-between">
+                  <span class="uk-text-small uk-text-uppercase">{{classSpells.info.number}} level</span>
+                  <app-multiple-checkboxes
+                    *ngIf="!classSpellsAttributes[className].memorize"
+                    [quantity]="classSpells.info.cast"
+                    [selected]="classSpells.info.casted"
+                    (ticks)="onCheckboxChange(className, classSpells.info.number, $event)"
+                  ></app-multiple-checkboxes>
+                </div>
+                <table *ngIf="classSpells.spell.length > 0; else noSpellsForThisFilter"
+                  class="uk-table uk-table-small uk-table-justify uk-table-middle uk-table-divider uk-width-1-1 uk-text-small">
+                  <thead>
+                    <tr>
+                      <th class="uk-table-shrink">Cast</th>
+                      <th>Name</th>
+                      <th class="uk-width-small">Range</th>
+                      <th class="uk-width-small">DC</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let singleSpell of classSpells.spell">
+                      <td>
+                        <a class="uk-icon-button uk-preserve-width"
+                          uk-icon="play-circle"
+                          (click)="castSpell(
+                            singleSpell.name,
+                            classSpells.info.number,
+                            className,
+                            classSpellsAttributes[className].memorize,
+                            classSpells.info.casted
+                          )"
+                        ></a>
+                      </td>
+                      <td class="clickable" (click)="onSelectSpell(singleSpell)">
+                        {{ singleSpell.name }}
+                      </td>
+                      <td>{{ !!singleSpell.range ? singleSpell.range : '-' }}</td>
+                      <td>{{ !!singleSpell.dc ? singleSpell.dc : '-' }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ng-template>
+          </div>
+        </li>
+      </ul>
+  </div>
+</div>
+
+<app-loading-overlay [loading]="loading"></app-loading-overlay>
+
+<app-prepare-spells-modal
+  [campaign]="campaign"
+  [sheet]="sheet"
+  [className]="selectedClass"
+  [spells]="selectedClassSpells"
+  #prepareSpellsModal
+></app-prepare-spells-modal>
+
+<app-spell-details-modal
+  [spell]="selectedSpell"
+  #spellDetailsModal
+></app-spell-details-modal>
+
+<ng-template #noSpellsForThisFilter>
+  <span class="uk-text-italic uk-margin-small-top uk-margin-small-bottom">
+    No spell match the search criteria.
+  </span>
+</ng-template>

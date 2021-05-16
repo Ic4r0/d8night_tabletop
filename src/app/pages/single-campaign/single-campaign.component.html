@@ -1,0 +1,218 @@
+<div class="page page-with-footer">
+
+  <!-- BREADCRUMB -->
+  <app-breadcrumb [list]="breadcrumb"></app-breadcrumb>
+
+  <div class="uk-width-5-6 uk-width-3-4@s uk-align-center">
+    <div class="uk-flex uk-flex-column">
+      <div class="uk-card uk-card-default uk-card-body uk-border-rounded uk-margin-small-bottom">
+        <div class="uk-flex uk-flex-middle uk-width-1-1">
+          <img class="uk-border-circle uk-height-small uk-margin-right uk-visible@s" [src]="campaignImageUrl | async" alt="">
+          <div class="uk-width-1-1">
+            <h3 class="uk-card-title">{{currentCampaign.name}}</h3>
+            <p>Master: <i>{{currentCampaign.master.displayName}}</i></p>
+            <div class="uk-visible@s uk-flex uk-flex-middle uk-flex-right">
+              <a *ngIf="!isMaster" class="uk-icon-button uk-margin-small-right" uk-icon="upload" uk-tooltip="New sheet" (click)="addSheet()"></a>
+              <a *ngIf="isMaster" [routerLink]="'/campaigns/' + currentCampaign.id + '/edit'" class="uk-icon-button uk-margin-small-right" uk-icon="cog" uk-tooltip="Settings"></a>
+              <a class="uk-icon-button" uk-icon="trash" uk-tooltip="Leave campaign" (click)="onLeaveCampaign()"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="uk-grid-match uk-grid-small" uk-grid>
+        <div class="uk-width-1-3@m">
+          <div class="uk-card uk-card-default uk-card-body uk-border-rounded">
+            <h4>Players</h4>
+            <ul class="uk-tab-right" uk-tab>
+              <li *ngFor="let player of currentCampaign.players" [ngClass]="{'uk-active': player.uid === selectedPlayer.uid}">
+                <a (click)="changeSelectedPlayer(player)">
+                  {{player.displayName}}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="uk-width-expand@m">
+          <div class="uk-card uk-card-default uk-card-body uk-border-rounded">
+            <h4>{{selectedPlayer.displayName}}'s sheets</h4>
+            <table class="uk-table uk-table-middle uk-table-divider uk-table-responsive">
+              <thead>
+                <tr>
+                  <th>PC name</th>
+                  <th>Class</th>
+                  <th>Level</th>
+                  <th class="uk-table-shrink">Actions</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="sheetsListByPlayer[selectedPlayer.uid].length > 0; else noSheets">
+                <tr *ngFor="let singleSheet of sheetsListByPlayer[selectedPlayer.uid] | paginate: { itemsPerPage: 5, currentPage: page }" class="uk-text-center uk-text-left@m">
+                  <td class="uk-text-truncate">
+                    {{ singleSheet.info.name }}
+                  </td>
+                  <td>
+                    <app-svg *ngFor="let singleClass of singleSheet.info.classes; let i = index"
+                      [name]="assignIcon(singleClass.name)"
+                      [width]="30"
+                      [attr.uk-tooltip]="singleClass.name"
+                      [ngClass]="{'uk-margin-small-right': singleSheet.info.classes.length > 1 && i !== singleSheet.info.classes.length - 1}">
+                    </app-svg>
+                  </td>
+                  <td>
+                    <div class="uk-flex uk-flex-center uk-flex-middle">
+                      {{ getLevelsList(singleSheet.info.classes) }}
+                    </div>
+                  </td>
+                  <td class="uk-flex uk-flex-middle">
+                    <a
+                      class="uk-icon-button"
+                      uk-icon="info"
+                      uk-tooltip="Open sheet"
+                      *ngIf="singleSheet.sharedWithMe"
+                      (click)="openSheet(singleSheet.sheetId)"
+                    ></a>
+                    <a
+                      class="uk-icon-button uk-margin-small-left uk-margin-small-right"
+                      uk-icon="trash"
+                      uk-tooltip="Delete sheet"
+                      *ngIf="singleSheet.owned || isMaster"
+                      (click)="onDeleteSheet(singleSheet.sheetId)"
+                    ></a>
+                    <a
+                      class="uk-icon-button"
+                      uk-icon="social"
+                      uk-tooltip="Share sheet"
+                      *ngIf="singleSheet.owned"
+                      (click)="shareSheet(singleSheet.sheetId)"
+                    ></a>
+                  </td>
+                </tr>
+              </tbody>
+              <ng-template #noSheets>
+                <tbody>
+                  <tr>
+                    <td>No sheet uploaded</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </ng-template>
+            </table>
+            <div class="uk-flex uk-flex-between uk-flex-middle uk-flex-wrap dark-pagination" *ngIf="sheetsListByPlayer[selectedPlayer.uid].length > 0">
+              <span class="uk-width-1-1 uk-width-auto@m uk-flex uk-flex-center uk-margin-small-top">
+                {{sheetsListByPlayer[selectedPlayer.uid].length}} sheet{{sheetsListByPlayer[selectedPlayer.uid].length === 1 ? '' : 's'}}
+              </span>
+              <pagination-controls
+                class="uk-width-1-1 uk-width-auto@m uk-flex uk-flex-center uk-margin-small-top"
+                (pageChange)="page = $event"
+                previousLabel="Prev."
+                nextLabel="Next"
+                screenReaderPaginationLabel="Pagination"
+                screenReaderPageLabel="page"
+                screenReaderCurrentLabel="On page">
+              </pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-mobile-footer class="uk-hidden@s" [buttons]="footerButtons" (label)="onFooterClicked($event)"></app-mobile-footer>
+
+<app-loading-overlay [loading]="loading"></app-loading-overlay>
+
+<app-modal [container]="false" [loading]="loadingModal" #leaveCampaignModal>
+  <div class="uk-modal-body">
+    <h3 class="uk-modal-title">Warning</h3>
+    <p>You are leaving this campaign. Do you confirm?</p>
+    <p *ngIf="isMaster" class="uk-text-meta uk-text-danger">By doing this you will delete this campaign also for your players.</p>
+    <div class="uk-margin-top uk-text-right">
+      <button class="uk-button uk-button-default uk-border-rounded uk-modal-close" type="button">
+        Cancel
+      </button>
+      <button class="uk-button uk-button-danger uk-border-rounded uk-margin-small-left"
+        type="button" (click)="leaveCampaign()">
+        Confirm
+      </button>
+    </div>
+  </div>
+</app-modal>
+
+<app-modal [container]="false" [loading]="loadingModal" (closing)="resetSelectedSheet()" #deleteSheetModal>
+  <div class="uk-modal-body">
+    <h3 class="uk-modal-title">Warning</h3>
+    <p>You are deleting {{!!selectedSheet ? selectedSheet.info.name : ''}} sheet. Do you confirm?</p>
+    <div class="uk-margin-top uk-text-right">
+      <button class="uk-button uk-button-default uk-border-rounded uk-modal-close" type="button">
+        Cancel
+      </button>
+      <button class="uk-button uk-button-danger uk-border-rounded uk-margin-small-left"
+        type="button" (click)="deleteSheet()">
+        Confirm
+      </button>
+    </div>
+  </div>
+</app-modal>
+
+<app-modal [container]="false" [loading]="loadingModal" (closing)="resetUploadModal()" #addNewSheet>
+  <div class="uk-modal-body">
+    <h3 class="uk-modal-title">New sheet</h3>
+    <div class="uk-card-body uk-flex uk-flex-center uk-flex-column" (upload)="onFileUpload($event.detail)" uk-overflow-auto>
+      <div class="uk-flex uk-flex-center uk-flex-column">
+        <div #sheetUpload class="uk-flex uk-flex-center" uk-form-custom>
+          <input type="file">
+          <button class="uk-button uk-button-default uk-border-rounded" type="button" tabindex="-1">
+            <span class="uk-margin-small-right" uk-icon="icon: cloud-upload"></span>
+            Upload
+          </button>
+        </div>
+      </div>
+      <div *ngIf="loadedSheet" class="uk-margin-top">
+        <p class="uk-margin-remove-bottom">You are adding:</p>
+        <ul class="uk-list uk-list-disc">
+          <li><i>Name:</i> {{loadedSheet.name}}</li>
+          <li><i>Level:</i> {{loadedSheet.level}}</li>
+          <li><i>Class:</i> {{formatLoadedClasses(loadedSheet.classes)}}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="uk-margin-top uk-text-right">
+      <button class="uk-button uk-button-default uk-border-rounded uk-modal-close" type="button">
+        Cancel
+      </button>
+      <button class="uk-button uk-button-primary uk-border-rounded uk-margin-small-left" (click)="uploadSheet()" type="button">
+        Confirm
+      </button>
+    </div>
+  </div>
+</app-modal>
+
+<app-modal [container]="false" [loading]="loadingModal" (closing)="resetSelectedSheet()" #shareSheetWithOthers>
+  <div class="uk-modal-body">
+    <h3 class="uk-modal-title">Share {{ !!selectedSheet ? selectedSheet.info.name : '' }} sheet</h3>
+    <div class="uk-card-body uk-flex uk-flex-center uk-flex-column" uk-overflow-auto>
+      <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-bottom">
+        <span></span>
+        <b>Authorize</b>
+      </div>
+      <div *ngFor="let auth of playersAuthForSelectedSheet" class="uk-flex uk-flex-between uk-flex-middle">
+        <span class="uk-text-truncate">{{auth.user.displayName}}</span>
+        <span class="uk-switch" (click)="changeSheetAuth(auth.user.uid)">
+          <input type="checkbox" [checked]="auth.sharedWith">
+          <div class="uk-switch-slider"></div>
+        </span>
+      </div>
+    </div>
+    <div class="uk-margin-top uk-text-right">
+      <button class="uk-button uk-button-default uk-border-rounded uk-modal-close" type="button">
+        Cancel
+      </button>
+      <button class="uk-button uk-button-primary uk-border-rounded uk-margin-small-left" (click)="updateShareAuth()" type="button">
+        Confirm
+      </button>
+    </div>
+  </div>
+</app-modal>
+

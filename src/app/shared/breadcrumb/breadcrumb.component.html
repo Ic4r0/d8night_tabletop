@@ -1,0 +1,10 @@
+<ng-container *ngIf="currentPath">
+  <ul class="uk-breadcrumb uk-margin-small-left uk-margin-small-top uk-hidden@s">
+    <li *ngFor="let item of prevPath"><a [routerLink]="item.path">{{item.name}}</a></li>
+    <li><span>{{currentPath}}</span></li>
+  </ul>
+  <ul class="uk-breadcrumb uk-margin-medium-left uk-margin-medium-top uk-visible@s">
+    <li *ngFor="let item of prevPath"><a [routerLink]="item.path">{{item.name}}</a></li>
+    <li><span>{{currentPath}}</span></li>
+  </ul>
+</ng-container>

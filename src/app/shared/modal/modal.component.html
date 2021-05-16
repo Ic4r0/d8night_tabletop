@@ -1,0 +1,7 @@
+<div #modal [ngClass]="{'uk-modal-container': container, 'uk-disabled': loading}" uk-modal>
+  <div class="uk-modal-dialog uk-border-rounded">
+    <ng-content>
+    </ng-content>
+    <app-loading-overlay [loading]="loading"></app-loading-overlay>
+  </div>
+</div>

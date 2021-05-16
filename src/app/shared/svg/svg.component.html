@@ -1,0 +1,7 @@
+<span *ngIf="ukButton; else noButton" class="uk-icon-button">
+  <img [src]="'assets/svg-icons/' + iconName + '.svg'" [style]="'width: ' + iconWidth">
+</span>
+
+<ng-template #noButton>
+  <img [src]="'assets/svg-icons/' + iconName + '.svg'" [style]="'width: ' + iconWidth">
+</ng-template>

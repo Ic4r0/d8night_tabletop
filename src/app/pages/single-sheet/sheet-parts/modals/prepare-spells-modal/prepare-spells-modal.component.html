@@ -1,0 +1,110 @@
+<app-modal [container]="false" [loading]="loadingModal" (closing)="reset()" #modal>
+  <div class="uk-modal-body" uk-overflow-auto>
+    <h2 class="uk-modal-title">
+        Choose spells to prepare
+    </h2>
+    <div *ngIf="spellsList.length > 0" class="uk-flex uk-flex-column">
+      <table class="uk-table uk-table-small uk-table-justify uk-table-middle uk-table-divider uk-width-1-1 uk-text-small">
+        <thead>
+          <tr>
+            <th>
+              Level
+            </th>
+            <th *ngFor="let singleLevel of spellsList">
+              <span class="uk-flex uk-flex-center">
+                {{singleLevel.info.number}}
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="uk-text-uppercase">
+              Spells per day
+            </td>
+            <td *ngFor="let singleLevel of spellsList">
+              <span class="uk-flex uk-flex-center">
+                {{singleLevel.info.cast}}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="uk-search uk-search-default uk-margin-small-top uk-margin-small-bottom uk-width-1-1">
+        <span class="uk-search-icon-flip" uk-search-icon></span>
+        <input class="uk-search-input uk-border-rounded" type="search" placeholder="Search..."
+          (keyup)="filterSpells($event)">
+      </div>
+      <div *ngIf="preparedNameList.length > 0"
+          class="uk-margin-top uk-margin-bottom uk-grid-small uk-child-width-1-2@s" uk-grid>
+        <div>
+          <button
+            class="uk-align-center uk-button uk-button-default uk-border-rounded uk-modal-close uk-width-1-1"
+            type="button" (click)="reset()">
+            Cancel
+          </button>
+        </div>
+        <div>
+          <button class="uk-align-center uk-button uk-button-primary uk-border-rounded uk-width-1-1"
+            type="button" (click)="submit()" [disabled]="!isFullPrepared()">
+            Prepare
+          </button>
+        </div>
+      </div>
+      <div class="uk-flex uk-flex-column" *ngFor="let singleLevel of spellsListFiltered">
+        <span class="uk-text-small uk-text-uppercase">
+          {{singleLevel.info.number}} level
+        </span>
+        <div *ngFor="let singleSpell of singleLevel.spell"
+          class="uk-flex uk-flex-column uk-margin-small-top">
+          <div class="uk-flex uk-flex-middle uk-flex-between">
+            <div class="uk-flex uk-flex-middle">
+              <div class="uk-flex uk-flex-middle uk-flex-center">
+                <a [ngClass]="{'clickable': preparedNameList.includes(singleSpell.name), 'not-clickable': !preparedNameList.includes(singleSpell.name)}"
+                  class="uk-icon-button uk-margin-small-right" uk-icon="minus" (click)="removeSpell(singleSpell, singleLevel.info.number)"></a>
+                <a [ngClass]="{'clickable': !isFullPrepared(), 'not-clickable': isFullPrepared()}"
+                  class="uk-icon-button" uk-icon="plus" (click)="addSpell(singleSpell, singleLevel.info.number)"></a>
+              </div>
+              <span class="uk-margin-left uk-text-wrap uk-text-small">
+                {{singleSpell.name}}
+              </span>
+            </div>
+            <span *ngIf="completeNameList[singleSpell.name]; else closedAccordion"
+              uk-icon="chevron-up" class="clickable"
+              (click)="completeNameList[singleSpell.name] = false"
+            ></span>
+            <ng-template #closedAccordion>
+              <span uk-icon="chevron-down" class="clickable"
+                (click)="completeNameList[singleSpell.name] = true"
+              ></span>
+            </ng-template>
+          </div>
+          <span *ngIf="completeNameList[singleSpell.name]" class="uk-margin-small-top uk-margin-small-bottom">
+            {{singleSpell.description}}
+          </span>
+        </div>
+      </div>
+      <div *ngIf="preparedNameList.length > 0" class="uk-margin-top uk-grid-small uk-child-width-1-2@s" uk-grid>
+        <div>
+          <button
+            class="uk-align-center uk-button uk-button-default uk-border-rounded uk-modal-close uk-width-1-1"
+            type="button" (click)="reset()">
+            Cancel
+          </button>
+        </div>
+        <div>
+          <button class="uk-align-center uk-button uk-button-primary uk-border-rounded uk-width-1-1"
+            type="button" (click)="submit()" [disabled]="!isFullPrepared()">
+            Prepare
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-modal>
+
+<ng-template #noSpellsForThisFilter>
+  <span class="uk-text-italic uk-margin-small-top uk-margin-small-bottom">
+    No spell match the search criteria.
+  </span>
+</ng-template>

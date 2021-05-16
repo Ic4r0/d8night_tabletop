@@ -1,0 +1,125 @@
+@import 'variables';
+
+// UIKIT
+
+.uk-checkbox:checked {
+  background-color: $tertiary-color !important;
+}
+
+.uk-tooltip {
+  background-color: rgba(255, 255, 255) !important;
+  color: $secondary-color !important;
+}
+
+.uk-button {
+  border-color: rgba($tertiary-color, 0.7) !important;
+}
+
+.uk-button:hover {
+  border-color: $tertiary-color !important;
+}
+
+.uk-progress {
+  &::-webkit-progress-value { background-color: $tertiary-color !important; } // those are the overflowing colors
+  &::-ms-fill { background-color: $tertiary-color !important; }
+}
+
+.uk-tab > .uk-active > a {
+  border-color: $tertiary-color !important;
+}
+
+.uk-subnav-pill > .uk-active > a {
+  background-color: $tertiary-color !important;
+  border-radius: 5px !important;
+}
+
+// NG-SELECT
+
+.ng-select.ng-select-single .ng-select-container {
+  height: 40px !important;
+}
+
+.ng-select .ng-select-container {
+  border: 1px solid #e5e5e5 !important;
+  min-height: 40px !important;
+}
+
+// NGX-PAGINATION
+
+.ngx-pagination .current {
+  background: $tertiary-color !important;
+  border-radius: 5px;
+}
+
+.ngx-pagination a:hover, .ngx-pagination button:hover {
+  background: rgba(255, 169, 251, 0.4) !important;
+  border-radius: 5px;
+}
+
+.dark-pagination .ngx-pagination .pagination-previous a, .dark-pagination .ngx-pagination .pagination-next a, .dark-pagination .ngx-pagination li a {
+  color: rgba(#666, 0.7) !important;
+}
+
+.dark-pagination .ngx-pagination .disabled {
+  color: rgb(190, 190, 190) !important;
+}
+
+.light-pagination .ngx-pagination .pagination-previous a, .ngx-pagination .pagination-next a, .light-pagination .ngx-pagination li a {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.light-pagination .ngx-pagination .disabled {
+  color: #999 !important;
+}
+
+// TOGGLE SWITCH
+
+/* -----------------------------
+Switch */
+
+.uk-switch {
+  position: relative;
+  display: inline-block;
+  height: 28px;
+  width: 50px;
+}
+
+/* Hide default HTML checkbox */
+.uk-switch input {
+  display:none;
+}
+/* Slider */
+.uk-switch-slider {
+  background-color: rgba(0,0,0,0.22);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  border-radius: 500px;
+  bottom: 0;
+  cursor: pointer;
+  transition-property: background-color;
+	transition-duration: .2s;
+  box-shadow: inset 0 0 2px rgba(0,0,0,0.07);
+}
+/* Switch pointer */
+.uk-switch-slider:before {
+  content: '';
+  background-color: #fff;
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: 2px;
+  bottom: 2px;
+  border-radius: 50%;
+  transition-property: transform, box-shadow;
+	transition-duration: .2s;
+}
+/* Slider active color */
+input:checked + .uk-switch-slider {
+  background-color: $tertiary-color !important;
+}
+/* Pointer active animation */
+input:checked + .uk-switch-slider:before {
+  transform: translateX(22px);
+}

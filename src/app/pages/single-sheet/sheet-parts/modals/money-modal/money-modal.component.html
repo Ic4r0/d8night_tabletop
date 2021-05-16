@@ -1,0 +1,87 @@
+<app-modal [container]="false" [loading]="loadingModal" (closing)="resetModal()" #modal>
+    <div *ngIf="wealth" class="uk-modal-body" uk-overflow-auto>
+        <h2 class="uk-modal-title">
+            Money
+        </h2>
+        <form [formGroup]="userInput">
+            <div class="uk-flex uk-flex-center">
+                <table class="uk-table uk-table-small uk-table-middle uk-table-justify uk-width-1-1">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="uk-flex uk-flex-middle uk-flex-center uk-text-small">
+                                    <span>Pp</span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="uk-flex uk-flex-middle uk-flex-center uk-text-small">
+                                    <span>Gp</span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="uk-flex uk-flex-middle uk-flex-center uk-text-small">
+                                    <span>Sp</span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="uk-flex uk-flex-middle uk-flex-center uk-text-small">
+                                    <span>Cp</span>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="uk-text-small">
+                                <input class="uk-input uk-border-rounded uk-width-1-1 money-box pp" type="number"
+                                    formControlName="pp" />
+                            </td>
+                            <td class="uk-text-small">
+                                <input class="uk-input uk-border-rounded uk-width-1-1 money-box gp" type="number"
+                                    formControlName="gp" />
+                            </td>
+                            <td class="uk-text-small">
+                                <input class="uk-input uk-border-rounded uk-width-1-1 money-box sp" type="number"
+                                    formControlName="sp" />
+                            </td>
+                            <td class="uk-text-small">
+                                <input class="uk-input uk-border-rounded uk-width-1-1 money-box cp" type="number"
+                                    formControlName="cp" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+        <div class="uk-margin-small-top uk-text-small uk-flex uk-flex-column"
+            *ngIf="controlsInvalid() || (userInput.touched && userInput.invalid)">
+            <span *ngIf="controlsInvalid()" class="uk-text-danger">
+                Negative values are not allowed
+            </span>
+            <span *ngIf="userInput.touched && userInput.invalid" class="uk-text-danger">
+                Fill at least one input
+            </span>
+        </div>
+        <div class="uk-margin-top uk-grid-small uk-child-width-1-3@s" uk-grid>
+            <div>
+                <button
+                    class="uk-align-center uk-button uk-button-default uk-border-rounded uk-modal-close uk-width-1-1"
+                    type="button" (click)="modal.hide()">
+                    Cancel
+                </button>
+            </div>
+            <div>
+                <button class="uk-align-center uk-button uk-button-danger uk-border-rounded uk-width-1-1" type="button"
+                    (click)="submit(false)">
+                    Remove
+                </button>
+            </div>
+            <div>
+                <button class="uk-align-center uk-button uk-button-primary uk-border-rounded uk-width-1-1" type="button"
+                    (click)="submit(true)">
+                    Add
+                </button>
+            </div>
+        </div>
+    </div>
+</app-modal>

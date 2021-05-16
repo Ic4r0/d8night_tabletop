@@ -1,0 +1,319 @@
+<!--
+    FIRST SHEET ROW
+    Desktop: Characteristics, Movement, Hit Points
+    Tablet: Characteristics
+    Mobile: Characteristics (2 rows)
+-->
+<div class="uk-child-width-1-2@m uk-grid-small uk-margin-small-bottom uk-grid-match" uk-grid>
+    <div *ngIf="!!abilities">
+        <app-ability-grid
+            [abilities]="abilities"
+            (modal)="onOpenAbilityScoresModal()"
+        ></app-ability-grid>
+    </div>
+
+    <div class="uk-visible@m">
+        <div class="uk-text-center uk-grid-small uk-grid-match" uk-grid>
+            <div class="uk-width-1-4">
+                <div class="uk-card uk-card-default uk-border-rounded uk-padding-small uk-flex uk-flex-column uk-flex-center clickable"
+                    (click)="onOpenMovementsModal()">
+                    <div class="uk-text-meta uk-text-small uk-text-uppercase">
+                        Walking
+                    </div>
+                    <h4 class="uk-margin-small-top uk-margin-small-bottom">
+                        <span class="uk-text-bold">{{walk}}</span>
+                        <span class="uk-text-meta uk-margin-small-left">ft.</span>
+                    </h4>
+                    <div class="uk-text-bolder uk-text-uppercase">
+                        Speed
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-3-4">
+                <div
+                    class="uk-card uk-card-default uk-border-rounded uk-padding-small uk-flex uk-flex-column uk-flex-center">
+                    <div class="uk-flex uk-flex-middle uk-flex-center uk-width-1-1">
+                        <div class="uk-flex uk-flex-column uk-flex-center input-block uk-margin-right">
+                            <div class="uk-text-meta uk-text-small uk-text-uppercase uk-invisible">
+                                /
+                            </div>
+                            <div class="uk-flex uk-flex-middle uk-flex-center">
+                                <span uk-icon="minus-circle" style="color: red;" class="clickable uk-margin-small-right"
+                                    (click)="onChangeHP(false)"></span>
+                                <input class="uk-input hp-input uk-border-rounded" type="number"
+                                    [(ngModel)]="newHpValue">
+                                <span uk-icon="plus-circle" style="color: green;" class="clickable uk-margin-small-left"
+                                    (click)="onChangeHP(true)"></span>
+                            </div>
+                        </div>
+                        <div class="uk-flex uk-flex-column uk-flex-center">
+                            <div class="uk-text-meta uk-text-small uk-text-uppercase">
+                                Current
+                            </div>
+                            <h4 class="uk-margin-small-top uk-margin-small-bottom uk-text-bold">
+                                {{currentHp}}
+                            </h4>
+                        </div>
+                        <div class="uk-flex uk-flex-column uk-flex-center uk-margin-small-left uk-margin-small-right">
+                            <div class="uk-text-meta uk-text-small uk-text-uppercase uk-invisible">
+                                /
+                            </div>
+                            <h4 class="uk-margin-small-top uk-margin-small-bottom">
+                                /
+                            </h4>
+                        </div>
+                        <div class="uk-flex uk-flex-column uk-flex-center">
+                            <div class="uk-text-meta uk-text-small uk-text-uppercase">
+                                Max
+                            </div>
+                            <h4 class="uk-margin-small-top uk-margin-small-bottom uk-text-bold">
+                                {{maxHp}}
+                            </h4>
+                        </div>
+                        <div class="uk-flex uk-flex-column uk-flex-center uk-margin-left temp-block">
+                            <div class="uk-text-meta uk-text-small uk-text-uppercase">
+                                Temp
+                            </div>
+                            <h4 class="uk-margin-small-top uk-margin-small-bottom uk-text-bold">
+                                {{tempHp}}
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="uk-text-bolder uk-text-uppercase clickable" (click)="onOpenHPModal()">
+                        Hit points
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SHEET BODY -->
+<div class="uk-margin-bottom uk-grid-small uk-grid-match uk-child-width-1-2@m" uk-grid>
+    <div>
+        <!-- FIRST TWO COLUMNS -->
+        <div class="uk-grid-small uk-grid-match" uk-grid>
+            <div class="uk-width-1-3@s">
+                <!-- FIRST COLUMN -->
+                <div class="uk-grid-small uk-child-width-1-1" uk-grid>
+                    <div>
+                        <!-- SAVES -->
+                        <div
+                            class="uk-card uk-card-default uk-border-rounded uk-padding-small uk-flex uk-flex-column uk-flex-center">
+                            <div class="uk-flex uk-flex-between uk-flex-middle uk-text-uppercase"
+                                *ngFor="let save of savesText">
+                                <span class="uk-text-small uk-text-meta uk-text-truncate">
+                                    {{save.name}}
+                                </span>
+                                <h4 class="uk-text-bold uk-margin-small-top uk-margin-small-bottom clickable"
+                                    [ngClass]="{'uk-text-warning': saves[save.lowerCase].edited}"
+                                    (click)="rollDice.rollD20(1, saves[save.lowerCase].modifier, save.name)">
+                                    {{ saves[save.lowerCase].text }}
+                                </h4>
+                            </div>
+                            <div class="uk-text-bolder uk-text-center uk-text-uppercase uk-margin-small-top clickable"
+                                (click)="onOpenSavesModal()">
+                                Saving Throws
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <!-- COMBAT MODIFIERS -->
+                        <div
+                            class="uk-card uk-card-default uk-border-rounded uk-padding-small uk-flex uk-flex-column uk-flex-center">
+                            <div class="uk-flex uk-flex-between uk-flex-middle uk-text-uppercase" *ngFor="let singleMod of combatModsText">
+                                <span class="uk-text-small uk-text-meta uk-margin-small-right">
+                                    {{singleMod.name}}
+                                </span>
+                                <h4 class="uk-text-bold uk-margin-small-top uk-margin-small-bottom uk-text-truncate clickable"
+                                    [ngClass]="{'uk-text-warning': abilities.Strength.edited || abilities.Dexterity.edited}"
+                                    [attr.uk-tooltip]="abilities.Strength.edited || abilities.Dexterity.edited ?
+                                        'Check ability scores for malus/bonus to these values' : null"
+                                    *ngIf="singleMod.lowerCase !== 'cmd'; else isCmd"
+                                    (click)="rollDice.rollD20(1, combat[singleMod.lowerCase].modifier, singleMod.name)">
+                                    {{ combat[singleMod.lowerCase].text }}
+                                </h4>
+                                <ng-template #isCmd>
+                                    <h4 class="uk-text-bold uk-margin-small-top uk-margin-small-bottom uk-text-truncate clickable"
+                                        [ngClass]="{'uk-text-warning': abilities.Strength.edited || abilities.Dexterity.edited}"
+                                        [attr.uk-tooltip]="abilities.Strength.edited || abilities.Dexterity.edited ?
+                                            'Check ability scores for malus/bonus to these values' : null">
+                                        {{ combat[singleMod.lowerCase].text }}
+                                    </h4>
+                                </ng-template>
+                            </div>
+                            <div class="uk-margin-small-bottom uk-text-small uk-text-italic uk-text-meta uk-text-center">
+                                {{conditionalMods ? 'There are' : 'There aren\'t any'}} modifiers
+                            </div>
+                            <div class="uk-text-bolder uk-text-center uk-text-uppercase uk-margin-small-top clickable"
+                                (click)="onOpenCombatModsModal()">
+                                Combat modifiers
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <!-- PROFICIENCIES AND LANGUAGES -->
+                        <div class="uk-card uk-card-default uk-border-rounded uk-padding-small uk-flex uk-flex-column clickable"
+                            (click)="onOpenProfLangModal()">
+                            <div class="uk-text-meta uk-text-small uk-text-uppercase">
+                                Proficiencies
+                            </div>
+                            <div *ngIf="!!proficiencies; else noProf"
+                                class="uk-margin-small-bottom uk-text-small uk-text-italic uk-text-meta truncate-long-text">
+                                {{proficiencies}}
+                            </div>
+                            <ng-template #noProf>
+                                <div class="uk-margin-small-bottom uk-text-small uk-text-italic uk-text-meta">
+                                    You have no weapon proficiency
+                                </div>
+                            </ng-template>
+                            <hr class="uk-margin-small-top uk-margin-small-bottom">
+                            <div class="uk-text-meta uk-text-small uk-text-uppercase">
+                                Languages
+                            </div>
+                            <div
+                                class="uk-margin-small-bottom uk-text-small uk-text-italic uk-text-meta truncate-long-text">
+                                {{languages}}
+                            </div>
+                            <div class="uk-text-bolder uk-text-center uk-text-uppercase uk-margin-small-top">
+                                Proficiencies and Languages
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-visible@s uk-width-2-3@s">
+                <!-- SECOND COLUMN - SKILLS -->
+                <!-- I cannot use the SkillsComponent since it messes with the .uk-grid-match class -->
+                <div class="uk-card uk-card-default uk-border-rounded uk-padding-small uk-flex
+                    uk-flex-column uk-flex-center uk-flex-between">
+                    <table class="uk-table uk-table-small uk-table-justify uk-table-divider uk-width-1-1">
+                        <thead>
+                            <tr>
+                                <th class="uk-table-shrink uk-text-small">T</th>
+                                <th class="uk-table-shrink uk-text-small">Ability</th>
+                                <th class="uk-width-auto uk-text-small">Skill</th>
+                                <th class="uk-table-shrink uk-text-small">Mod</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let skill of skills">
+                                <td class="uk-text-small">{{ skill.trained ? '●' : '○'}}</td>
+                                <td class="uk-text-small uk-text-uppercase uk-text-center">{{ skill.ability }}</td>
+                                <td class="uk-text-small uk-text-truncate clickable" (click)="onSelectedSkill(skill.name)"
+                                    [attr.uk-tooltip]="skill.name">
+                                    {{ skill.name }}
+                                </td>
+                                <td class="uk-text-small uk-text-bold uk-text-center clickable"
+                                    [ngClass]="{'uk-text-warning': skill.edited}"
+                                    (click)="rollDice.rollD20(1, skill.total, skill.name)">
+                                    {{ skill.text }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div
+                        class="uk-flex uk-flex-center uk-flex-middle uk-text-bolder uk-text-center uk-text-uppercase uk-margin-small-top">
+                        <span>Skills</span>
+                        <span class="clickable uk-margin-small-left" uk-icon="icon: cog; ratio: 0.8"
+                          (click)="onOpenSkillsModal()"></span>
+                        <span class="clickable uk-margin-small-left" uk-icon="info"
+                          *ngIf="!!sheet.skills.conditionalModifiers"
+                          (click)="skillsModsModal.show()"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- LAST COLUMN -->
+    <div class="uk-visible@m">
+        <div class="uk-flex uk-flex-column">
+            <app-over-sections-tab
+                [initiative]="initiative"
+                [ac]="ac"
+                [defenses]="defenses"
+                [senses]="senses"
+                (initiativeModal)="onOpenInitiativeModal()"
+                (acModal)="onOpenACModal()"
+                (defSensesModal)="onOpenDefSensesModal()"
+            ></app-over-sections-tab>
+
+            <div class="uk-width-1-1 uk-margin-top uk-card uk-card-default uk-border-rounded uk-padding-small uk-flex uk-flex-column fill-height"
+                uk-overflow-auto>
+                <ul uk-tab class="uk-visible@s">
+                    <li class="uk-active"><a>Actions</a></li>
+                    <li><a>Spells</a></li>
+                    <li><a>Equipment</a></li>
+                    <li><a>Feats & Traits</a></li>
+                    <li><a>Descriptions</a></li>
+                    <li><a>Extras</a></li>
+                </ul>
+
+                <ul class="uk-switcher sections-list">
+                    <!-- ACTIONS TAB -->
+                    <li>
+                        <app-actions
+                          [campaign]="campaign.id"
+                          [sheet]="sheetId"
+                          [bab]="sheet?.combat?.bab"
+                          [unarmed]="sheet?.combat?.weapons?.unarmed"
+                          [weapons]="sheet?.combat?.weapons?.weapon"
+                          [specialAttacks]="sheet?.specialAttacks"
+                          [tablet]="tablet"
+                          [mobile]="mobile"
+                        ></app-actions>
+                    </li>
+                    <!-- SPELLS TAB -->
+                    <li>
+                        <app-spells
+                          [campaign]="campaign.id"
+                          [sheet]="sheetId"
+                          [spells]="sheet?.spells"
+                          [tablet]="tablet"
+                          [mobile]="mobile"
+                        ></app-spells>
+                    </li>
+                    <!-- EQUIPMENT TAB -->
+                    <li>
+                        <app-equipment
+                            [campaign]="campaign.id"
+                            [sheet]="sheetId"
+                            [equipment]="sheet?.gear"
+                            [tablet]="tablet"
+                            [mobile]="mobile"
+                        ></app-equipment>
+                    </li>
+                    <!-- FEATS AND TRAITS TAB -->
+                    <li>
+                        <app-feats-traits [checkLists]="sheet?.checkLists"
+                            [archetypes]="sheet?.archetypes" [specialQualities]="sheet?.specialQualities"
+                            [feats]="sheet?.feats" [traits]="sheet?.traits" [tablet]="tablet"
+                            [mobile]="mobile"></app-feats-traits>
+                    </li>
+                    <!-- DESCRIPTIONS TAB -->
+                    <li>
+                        <app-descriptions [alignment]="sheet?.alignment" [info]="sheet?.info"
+                            [deity]="sheet?.deity" [tablet]="tablet" [mobile]="mobile">
+                        </app-descriptions>
+                    </li>
+                    <!-- EXTRAS TAB -->
+                    <li>
+                        <app-extras
+                          [sheet]="sheetId"
+                          [campaign]="campaign"
+                          [notes]="sheet?.notes"
+                          [tablet]="tablet"
+                          [mobile]="mobile"
+                        ></app-extras>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-skill-modifiers-modal
+  [modifiers]="sheet.skills.conditionalModifiers"
+  #skillsModsModal
+></app-skill-modifiers-modal>

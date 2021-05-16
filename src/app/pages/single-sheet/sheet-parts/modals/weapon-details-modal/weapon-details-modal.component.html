@@ -1,0 +1,151 @@
+<app-modal [container]="false" [loading]="loadingModal" (closing)="reset()" #modal>
+  <div *ngIf="!!weaponValue" class="uk-modal-body" uk-overflow-auto>
+    <button class="uk-modal-close-default" type="button" uk-close></button>
+    <h2 class="uk-modal-title">
+        {{weaponValue.common.name}}
+    </h2>
+    <div class="uk-flex uk-flex-column uk-margin-small-top uk-text-small">
+      <span>
+        <b>Type</b> {{weaponValue.common.type}}{{!!weaponValue.common.category ? ', ' + weaponValue.common.category : ''}}{{weaponValue.common.isLight ? ', light' : ''}}
+      </span>
+      <span *ngIf="!!weaponValue.common.hand">
+        <b>Wield</b> {{weaponValue.common.hand}}
+      </span>
+      <span *ngIf="!!weaponValue.common.size">
+        <b>Size</b> {{weaponValue.common.size}}
+      </span>
+      <div class="uk-flex uk-flex-middle uk-flex-wrap">
+        <span class="uk-margin-small-right">
+          <b>To Hit</b> <span class="clickable" (click)="rollToHit(weaponValue.common.toHit)">{{' ' + weaponValue.common.toHit + '/' + weaponValue.common.critical}}</span>
+        </span>
+        <span class="uk-margin-small-right">
+          <b>Damage</b> <span class="clickable" (click)="rollDice.parseRoll(weaponValue.common.damage, weaponValue.common.name)">{{' ' + weaponValue.common.damage}}</span>
+        </span>
+        <span class="uk-margin-small-right">
+          <b>Reach</b> {{weaponValue.common.reach}}
+        </span>
+        <span *ngIf="!!weaponValue.common.range" class="uk-margin-small-right">
+          <b>Range</b> {{weaponValue.common.range}}
+        </span>
+      </div>
+      <span *ngIf="!!weaponValue.common.specialProperties">
+        <b>Special properties</b> {{weaponValue.common.specialProperties}}
+      </span>
+
+      <div *ngIf="!!weaponValue.melee" class="uk-flex uk-flex-column">
+        <span class="uk-margin-small-top borders uk-text-uppercase">
+          Melee
+        </span>
+        <div class="uk-overflow-auto">
+          <table class="uk-table uk-table-small uk-table-justify uk-table-middle uk-table-divider uk-width-1-1 uk-text-small">
+            <thead>
+              <tr>
+                <th>
+                  <span>Wield</span>
+                </th>
+                <th class="uk-width-small">
+                  <div class="uk-flex uk-flex-middle uk-flex-center">
+                    <span>To hit</span>
+                  </div>
+                </th>
+                <th class="uk-width-small">
+                  <div class="uk-flex uk-flex-middle uk-flex-center">
+                    <span>Damage</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let wield of wieldStyles">
+                <td>
+                  <span>{{wieldsLegend[wield]}}</span>
+                </td>
+                <td>
+                  <div class="uk-flex uk-flex-middle uk-flex-center clickable"
+                    (click)="rollToHit(weaponValue.melee[wield].toHit)">
+                    <span>{{weaponValue.melee[wield].toHit}}</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="uk-flex uk-flex-middle uk-flex-center clickable"
+                    (click)="rollDice.parseRoll(weaponValue.melee[wield].damage, weaponValue.common.name)">
+                    <span>{{weaponValue.melee[wield].damage}}</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div *ngIf="!!weaponValue.ranges" class="uk-flex uk-flex-column">
+        <span class="uk-margin-small-top borders uk-text-uppercase">
+          Ranged
+        </span>
+        <div class="uk-overflow-auto">
+          <table class="uk-table uk-table-small uk-table-justify uk-table-middle uk-table-divider uk-width-1-1 uk-text-small">
+            <thead>
+              <tr>
+                <th>
+                  <span>Distance</span>
+                </th>
+                <th class="uk-width-small">
+                  <div class="uk-flex uk-flex-middle uk-flex-center">
+                    <span>To hit</span>
+                  </div>
+                </th>
+                <th class="uk-width-small">
+                  <div class="uk-flex uk-flex-middle uk-flex-center">
+                    <span>Damage</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let singleRange of weaponValue.ranges">
+                <td>
+                  <span>{{singleRange.distance}}</span>
+                </td>
+                <td>
+                  <div class="uk-flex uk-flex-middle uk-flex-center clickable"
+                    (click)="rollToHit(singleRange.toHit)">
+                    <span>{{singleRange.toHit}}</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="uk-flex uk-flex-middle uk-flex-center clickable"
+                    (click)="rollDice.parseRoll(singleRange.damage, weaponValue.common.name)">
+                    <span>{{singleRange.damage}}</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <span class="uk-margin-small-top uk-margin-small-bottom borders uk-text-uppercase">
+        Notes
+      </span>
+      <textarea class="uk-width-1-1 uk-height-small" [(ngModel)]="notes"></textarea>
+      <div *ngIf="notes != weaponValue.common.notes" class="uk-margin-top uk-grid-small uk-child-width-1-2@s" uk-grid>
+        <div>
+          <button
+            class="uk-align-center uk-button uk-button-default uk-border-rounded uk-modal-close uk-width-1-1"
+            type="button"
+            (click)="modal.hide()">
+            Cancel
+          </button>
+        </div>
+        <div>
+          <button
+            class="uk-align-center uk-button uk-button-primary uk-border-rounded uk-width-1-1"
+            type="button"
+            (click)="submitNotes()">
+            Edit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-modal>

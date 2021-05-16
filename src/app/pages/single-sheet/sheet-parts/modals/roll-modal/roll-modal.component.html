@@ -1,0 +1,120 @@
+<app-modal [container]="false" #modal>
+  <div class="uk-modal-body" uk-overflow-auto>
+    <h2 class="uk-modal-title">Custom roll</h2>
+    <form [formGroup]="modifiersForm">
+      <div class="uk-flex uk-flex-column uk-flex-center">
+  
+        <div class="uk-flex uk-flex-middle uk-flex-center">
+          <div class="uk-flex uk-flex-middle uk-flex-center dice">
+            <span uk-icon="minus-circle" style="color: red;" class="clickable uk-margin-small-right"
+              (click)="d100 = d100 > 0 ? d100 - 1 : d100"></span>
+            <span class="uk-badge dice-badge uk-flex uk-flex-top uk-margin-small-right">{{d100}}</span>
+            <img src="assets/dice-icons/d100.png" width="40" height="40">
+            <span uk-icon="plus-circle" style="color: green;" class="clickable uk-margin-small-left"
+              (click)="d100 = d100 + 1"></span>
+          </div>
+          <div class="uk-margin-left modifier">
+            <input class="uk-input uk-border-rounded" type="number" formControlName="d100Mod"/>
+          </div>
+        </div>
+  
+        <div class="uk-flex uk-flex-middle uk-flex-center uk-margin-small-top">
+          <div class="uk-flex uk-flex-middle uk-flex-center dice">
+            <span uk-icon="minus-circle" style="color: red;" class="clickable uk-margin-small-right"
+              (click)="d20 = d20 > 0 ? d20 - 1 : d20"></span>
+            <span class="uk-badge dice-badge uk-flex uk-flex-top uk-margin-small-right">{{d20}}</span>
+            <img src="assets/dice-icons/d20.png" width="40" height="40">
+            <span uk-icon="plus-circle" style="color: green;" class="clickable uk-margin-small-left"
+              (click)="d20 = d20 + 1"></span>
+          </div>
+          <div class="uk-margin-left modifier">
+            <input class="uk-input uk-border-rounded" type="number" formControlName="d20Mod"/>
+          </div>
+        </div>
+  
+  
+        <div class="uk-flex uk-flex-middle uk-flex-center uk-margin-small-top">
+          <div class="uk-flex uk-flex-middle uk-flex-center dice">
+            <span uk-icon="minus-circle" style="color: red;" class="clickable uk-margin-small-right"
+              (click)="d12 = d12 > 0 ? d12 - 1 : d12"></span>
+            <span class="uk-badge dice-badge uk-flex uk-flex-top uk-margin-small-right">{{d12}}</span>
+            <img src="assets/dice-icons/d12.png" width="40" height="40">
+            <span uk-icon="plus-circle" style="color: green;" class="clickable uk-margin-small-left"
+              (click)="d12 = d12 + 1"></span>
+          </div>
+          <div class="uk-margin-left modifier">
+            <input class="uk-input uk-border-rounded" type="number" formControlName="d12Mod"/>
+          </div>
+        </div>
+  
+  
+        <div class="uk-flex uk-flex-middle uk-flex-center uk-margin-small-top">
+          <div class="uk-flex uk-flex-middle uk-flex-center dice">
+            <span uk-icon="minus-circle" style="color: red;" class="clickable uk-margin-small-right"
+              (click)="d10 = d10 > 0 ? d10 - 1 : d10"></span>
+            <span class="uk-badge dice-badge uk-flex uk-flex-top uk-margin-small-right">{{d10}}</span>
+            <img src="assets/dice-icons/d10.png" width="40" height="40">
+            <span uk-icon="plus-circle" style="color: green;" class="clickable uk-margin-small-left"
+              (click)="d10 = d10 + 1"></span>
+          </div>
+          <div class="uk-margin-left modifier">
+            <input class="uk-input uk-border-rounded" type="number" formControlName="d10Mod"/>
+          </div>
+        </div>
+  
+  
+        <div class="uk-flex uk-flex-middle uk-flex-center uk-margin-small-top">
+          <div class="uk-flex uk-flex-middle uk-flex-center dice">
+            <span uk-icon="minus-circle" style="color: red;" class="clickable uk-margin-small-right"
+              (click)="d8 = d8 > 0 ? d8 - 1 : d8"></span>
+            <span class="uk-badge dice-badge uk-flex uk-flex-top uk-margin-small-right">{{d8}}</span>
+            <img src="assets/dice-icons/d8.png" width="40" height="40">
+            <span uk-icon="plus-circle" style="color: green;" class="clickable uk-margin-small-left"
+              (click)="d8 = d8 + 1"></span>
+          </div>
+          <div class="uk-margin-left modifier">
+            <input class="uk-input uk-border-rounded" type="number" formControlName="d8Mod"/>
+          </div>
+        </div>
+  
+  
+        <div class="uk-flex uk-flex-middle uk-flex-center uk-margin-small-top">
+          <div class="uk-flex uk-flex-middle uk-flex-center dice">
+            <span uk-icon="minus-circle" style="color: red;" class="clickable uk-margin-small-right"
+              (click)="d6 = d6 > 0 ? d6 - 1 : d6"></span>
+            <span class="uk-badge dice-badge uk-flex uk-flex-top uk-margin-small-right">{{d6}}</span>
+            <img src="assets/dice-icons/d6.png" width="40" height="40">
+            <span uk-icon="plus-circle" style="color: green;" class="clickable uk-margin-small-left"
+              (click)="d6 = d6 + 1"></span>
+          </div>
+          <div class="uk-margin-left modifier">
+            <input class="uk-input uk-border-rounded" type="number" formControlName="d6Mod"/>
+          </div>
+        </div>
+  
+  
+        <div class="uk-flex uk-flex-middle uk-flex-center uk-margin-small-top">
+          <div class="uk-flex uk-flex-middle uk-flex-center dice">
+            <span uk-icon="minus-circle" style="color: red;" class="clickable uk-margin-small-right"
+              (click)="d4 = d4 > 0 ? d4 - 1 : d4"></span>
+            <span class="uk-badge dice-badge uk-flex uk-flex-top uk-margin-small-right">{{d4}}</span>
+            <img src="assets/dice-icons/d4.png" width="40" height="40">
+            <span uk-icon="plus-circle" style="color: green;" class="clickable uk-margin-small-left"
+              (click)="d4 = d4 + 1"></span>
+          </div>
+          <div class="uk-margin-left modifier">
+            <input class="uk-input uk-border-rounded" type="number" formControlName="d4Mod"/>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="uk-margin-top uk-text-center">
+        <button
+          class="uk-button uk-button-primary uk-border-rounded uk-modal-close uk-width-1-1 uk-width-1-2@s uk-width-1-3@m"
+          type="button"
+          (click)="onRoll()">
+          Roll
+        </button>
+    </div>
+  </div>
+</app-modal>

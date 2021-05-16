@@ -1,0 +1,20 @@
+<app-modal [container]="false" #modal>
+    <div class="uk-modal-body" uk-overflow-auto>
+        <ul class="uk-list uk-list-large uk-list-divider">
+            <li
+                *ngFor="let section of sections"
+                class="uk-flex uk-flex-middle clickable"
+                (click)="changeSection(section.section)">
+                <app-svg
+                  [name]="section.icon"
+                  [width]="30"
+                  class="uk-margin-small-right uk-preserve-width"
+                ></app-svg>
+                <span class="uk-text-small uk-text-uppercase">
+                    {{section.name}}
+                </span>
+            </li>
+        </ul>
+      </div>
+      
+</app-modal>

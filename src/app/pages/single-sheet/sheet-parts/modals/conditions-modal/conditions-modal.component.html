@@ -1,0 +1,86 @@
+<app-modal [container]="false" [loading]="loadingModal" #modal>
+  <div *ngIf="!!conditionsValue" class="uk-modal-body" uk-overflow-auto>
+    <h2 class="uk-modal-title">
+      Conditions
+    </h2>
+    <form [formGroup]="tempValues">
+      <ul class="uk-list uk-list-divider">
+        <li *ngFor="let singleCondition of conditionsList" class="uk-flex uk-flex-column">
+          <div class="uk-flex uk-flex-middle uk-flex-between">
+            <div
+              class="uk-flex uk-flex-middle clickable"
+              (click)="toggleDescription(singleCondition.icon)">
+              <app-svg
+                [name]="'conditions/' + singleCondition.icon"
+                [width]="30"
+              ></app-svg>
+              <span class="uk-text-truncate uk-margin-small-left uk-text-small">
+                {{singleCondition.name}}
+              </span>
+            </div>
+            <div class="uk-flex uk-flex-middle">
+              <span class="uk-switch uk-margin-small-right" (click)="changeValue(singleCondition.icon)">
+                <input type="checkbox" [checked]="tempValues.get(singleCondition.icon).value">
+                <div class="uk-switch-slider"></div>
+              </span>
+              <span
+                class="clickable"
+                [attr.uk-icon]="descriptionOpen[singleCondition.icon] ? 'chevron-up' : 'chevron-down'"
+                (click)="toggleDescription(singleCondition.icon)"
+              ></span>
+            </div>
+          </div>
+          <div
+            *ngIf="descriptionOpen[singleCondition.icon]"
+            class="uk-margin-small-top">
+            <div *ngFor="let singleParagraph of singleCondition.description">
+              <p
+                *ngIf="checkString(singleParagraph); else isTable"
+                class="uk-text-small">
+                {{singleParagraph}}
+              </p>
+              <ng-template #isTable>
+                <table class="uk-table uk-table-small uk-table-divider uk-table-striped uk-table-justify uk-table-middle">
+                  <thead>
+                      <tr>
+                          <th>
+                            {{singleParagraph.header[0]}}
+                          </th>
+                          <th>
+                            {{singleParagraph.header[1]}}
+                          </th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let singleRow of singleParagraph.rows">
+                          <td class="uk-text-small">{{singleRow[0]}}</td>
+                          <td class="uk-text-small">{{singleRow[1]}}</td>
+                      </tr>
+                  </tbody>
+                </table>
+              </ng-template>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </form>
+    <div *ngIf="checkDifferences()" class="uk-margin-top uk-grid-small uk-child-width-1-2@s" uk-grid>
+      <div>
+        <button
+          class="uk-align-center uk-button uk-button-default uk-border-rounded uk-modal-close uk-width-1-1"
+          type="button"
+          (click)="reset()">
+          Cancel
+        </button>
+      </div>
+      <div>
+        <button
+          class="uk-align-center uk-button uk-button-primary uk-border-rounded uk-width-1-1"
+          type="button"
+          (click)="editConditions()">
+          Edit
+        </button>
+      </div>
+    </div>
+  </div>
+</app-modal>

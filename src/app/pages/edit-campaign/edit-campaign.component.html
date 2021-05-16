@@ -1,0 +1,152 @@
+<div class="page page-with-footer">
+
+  <!-- BREADCRUMB -->
+  <app-breadcrumb [list]="breadcrumb"></app-breadcrumb>
+
+  <div class="uk-width-5-6 uk-width-3-4@m uk-align-center">
+    <div class="uk-flex uk-flex-column">
+      <!-- CAMPAIGN AND MASTER NAMES -->
+      <div class="uk-card uk-card-default uk-border-rounded uk-width-1-1 uk-margin-small-bottom">
+        <div class="uk-card-header">
+          <h3 class="uk-card-title">
+            Campaign info
+          </h3>
+        </div>
+        <div class="uk-card-body">
+          <div class="uk-form-controls uk-margin-small-bottom">
+            <label class="uk-form-label">Campaign name*</label>
+            <input
+              [(ngModel)]="campaignName"
+              type="text"
+              class="uk-input uk-border-rounded"
+              placeholder="Write the campaign name"
+              [disabled]="!!currentCampaign"
+              required
+            >
+            <div class="uk-margin-small-top" *ngIf="saveButton && !campaignName">
+              <p class="uk-text-danger uk-text-small uk-margin-remove-bottom">Required field</p>
+            </div>
+          </div>
+          <div class="uk-form-controls">
+            <label class="uk-form-label">Dungeon Master*</label>
+            <ng-select
+              class="uk-width-expand"
+              [items]="usersList"
+              [readonly]="!!currentCampaign"
+              placeholder="Select the DM"
+              notFoundText="No results"
+              bindLabel="displayName"
+              [disabled]="!!currentCampaign"
+              [(ngModel)]="dungeonMaster">
+            </ng-select>
+            <div class="uk-margin-small-top" *ngIf="saveButton && !dungeonMaster">
+              <p class="uk-text-danger uk-text-small uk-margin-remove-bottom">Required field</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- CAMPAIGN PICTURE -->
+      <div class="uk-card uk-card-default uk-border-rounded uk-width-1-1 uk-margin-small-bottom">
+        <div class="uk-card-header">
+          <h3 class="uk-card-title">
+            Campaign avatar
+          </h3>
+        </div>
+        <div class="uk-card-body" (upload)="onFileUpload($event.detail)">
+          <div class="uk-flex uk-flex-center uk-flex-column">
+            <img *ngIf="!!currentCampaign && !showImageCropper" class="uk-align-center uk-border-circle uk-height-small current-picture uk-margin-bottom" [src]="campaignImageUrl | async" alt="">
+            <div #imgUpload class="uk-flex uk-flex-center" uk-form-custom>
+              <input type="file">
+              <button class="uk-button uk-button-default uk-border-rounded" type="button" tabindex="-1">
+                <span class="uk-margin-small-right" uk-icon="icon: cloud-upload"></span>
+                {{ !!currentCampaign && !showImageCropper ? 'Change avatar' : 'Upload avatar' }}
+              </button>
+            </div>
+          </div>
+          <div class="uk-margin-small-top uk-text-center" *ngIf="saveButton && (!campaignImage || !!currentCampaign)">
+            <p class="uk-text-danger uk-text-small uk-margin-remove-bottom">Required field</p>
+          </div>
+          <div class="uk-flex uk-flex-center uk-flex-middle">
+            <image-cropper
+              class="uk-margin-medium-top uk-margin-small-right uk-width-1-3"
+              [imageFile]="imgUploaded"
+              [maintainAspectRatio]="true"
+              [resizeToWidth]="400"
+              [cropperMinWidth]="150"
+              [onlyScaleDown]="true"
+              [alignImage]="'left'"
+              [style.display]="showImageCropper ? null : 'none'"
+              format="png"
+              (imageLoaded)="imageLoaded()"
+              (imageCropped)="imageCropped($event)"
+            ></image-cropper>
+            <img class="uk-width-1-4 uk-border-circle" [src]="croppedImageBase64" [style.border]="croppedImageBase64 ? '1px solid black' : 'none'" />
+          </div>
+        </div>
+      </div>
+      <!-- PLAYERS NAMES -->
+      <div class="uk-card uk-card-default uk-border-rounded uk-width-1-1 uk-margin-medium-bottom">
+        <div class="uk-card-header">
+          <h3 class="uk-card-title">
+            Players
+          </h3>
+        </div>
+        <div class="uk-card-body">
+          <div class="uk-form-controls">
+            <label class="uk-form-label">Players*</label>
+            <ng-select
+              class="uk-width-expand"
+              [items]="usersList"
+              multiple="true"
+              [closeOnSelect]="false"
+              [hideSelected]="true"
+              placeholder="Add players"
+              notFoundText="No results"
+              bindLabel="displayName"
+              [(ngModel)]="players">
+            </ng-select>
+            <div class="uk-margin-small-top" *ngIf="saveButton && checkPlayers()">
+              <p class="uk-text-danger uk-text-small uk-margin-remove-bottom">Required field</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="uk-visible@s uk-margin-small-bottom uk-flex uk-flex-center uk-flex-middle uk-light">
+        <button class="uk-button uk-button-default uk-border-rounded uk-width-1-3" (click)="goBack()">
+          <span uk-icon="refresh" class="uk-margin-small-right"></span>
+          Cancel
+        </button>
+        <button class="uk-button uk-button-default uk-border-rounded uk-width-1-3 uk-margin-left" (click)="onSaveClick()">
+          <span *ngIf="!loading; else spinnerIcon" uk-icon="file-edit" class="uk-margin-small-right"></span>
+          <ng-template #spinnerIcon>
+            <span uk-spinner="ratio: 0.75" class="uk-margin-small-right"></span>
+          </ng-template>
+          Save
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<app-mobile-footer class="uk-hidden@s" [buttons]="footerButtons" (label)="onFooterClicked($event)"></app-mobile-footer>
+
+<app-loading-overlay [loading]="loading"></app-loading-overlay>
+
+<app-modal [container]="false" #warningPictureChange>
+  <div class="uk-modal-body">
+    <h3 class="uk-modal-title">Warning</h3>
+    <p>You are changing the current campaign avatar. Do you confirm?</p>
+    <div class="uk-margin-top uk-text-right">
+      <button class="uk-button uk-button-default uk-border-rounded"
+        type="button" (click)="cancelNewPicture()">
+        Cancel
+      </button>
+      <button class="uk-button uk-button-danger uk-border-rounded uk-margin-small-left"
+        type="button" (click)="changePicture()">
+        Save
+      </button>
+    </div>
+  </div>
+</app-modal>

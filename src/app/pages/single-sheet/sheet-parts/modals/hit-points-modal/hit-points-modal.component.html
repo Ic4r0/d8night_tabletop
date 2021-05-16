@@ -1,0 +1,123 @@
+<app-modal [container]="false" [loading]="loadingModal" #modal>
+    <div *ngIf="hpValue" class="uk-modal-body" uk-overflow-auto>
+        <h2 class="uk-modal-title">
+            Hit Points
+        </h2>
+        <div *ngIf="hpValue.dr" class="uk-text-small uk-margin-top">
+            <ul class="uk-list uk-list-disc">
+                <li>
+                    <span class="uk-text-uppercase uk-margin-small-right">Damage Reduction:</span>
+                    <span>
+                        {{hpValue.dr}}
+                    </span>
+                </li>
+            </ul>
+        </div>
+        <div class="uk-flex uk-flex-middle uk-flex-center uk-margin-top">
+            <div class="uk-flex uk-flex-middle uk-flex-center uk-margin-right">
+                <span uk-icon="minus-circle" style="color: red;" class="clickable uk-margin-small-right" (click)="changeHP(false)"></span>
+                <input class="uk-input hp-input uk-border-rounded" type="number" [(ngModel)]="newHpValue">
+                <span uk-icon="plus-circle" style="color: green;" class="clickable uk-margin-small-left" (click)="changeHP(true)"></span>
+            </div>
+            <span class="uk-text-small uk-margin-small-top uk-margin-small-bottom uk-text-center">
+                {{currentHpValue}}
+            </span>
+            <span class="uk-text-small uk-margin-small-top uk-margin-small-bottom uk-text-center uk-margin-small-left uk-margin-small-right">
+                /
+            </span>
+            <span class="uk-text-small uk-margin-small-top uk-margin-small-bottom uk-text-center">
+                {{maxHpValue}}
+            </span>
+        </div>
+        <form [formGroup]="tempModifiers">
+            <div class="uk-flex uk-flex-center uk-margin-top">
+                <table class="uk-table uk-table-small uk-table-middle uk-table-justify uk-table-divider uk-width-1-1">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="uk-flex uk-flex-middle uk-flex-center uk-text-small">
+                                    <span>Current</span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="uk-flex uk-flex-middle uk-flex-center uk-text-small">
+                                    <span>Max</span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="uk-flex uk-flex-middle uk-flex-center uk-text-small">
+                                    <span>MaxTemp</span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="uk-flex uk-flex-middle uk-flex-center uk-text-small">
+                                    <span>Temp</span>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="uk-text-small uk-text-center">
+                                {{hpValue.currentHp}}
+                            </td>
+                            <td class="uk-text-small uk-text-center">
+                                {{hpValue.maxHp}}
+                            </td>
+                            <td class="uk-text-small uk-text-center">
+                                <input class="uk-input uk-border-rounded input-width" type="number"
+                                    formControlName="maxHpTemp" />
+                            </td>
+                            <td class="uk-text-small uk-text-center">
+                                <input class="uk-input uk-border-rounded input-width" type="number"
+                                    formControlName="tempHp" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+        <div *ngIf="checkDifferences()" class="uk-margin-top uk-grid-small uk-child-width-1-2@s" uk-grid>
+            <div>
+                <button class="uk-align-center uk-button uk-button-default uk-border-rounded uk-modal-close uk-width-1-1"
+                    type="button" (click)="resetTable()">
+                    Cancel
+                </button>
+            </div>
+            <div>
+                <button class="uk-align-center uk-button uk-button-primary uk-border-rounded uk-width-1-1" type="button"
+                    (click)="editHP()">
+                    Edit
+                </button>
+            </div>
+        </div>
+        <div class="uk-flex uk-flex-center uk-margin-top">
+            <table class="uk-table uk-table-small uk-table-middle uk-table-justify uk-table-divider uk-width-1-1 uk-width-1-2@s">
+                <thead>
+                    <tr>
+                        <th>
+                            <div class="uk-flex uk-flex-middle uk-flex-center uk-text-small">
+                                <span>Lvl</span>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="uk-flex uk-flex-middle uk-flex-center uk-text-small">
+                                <span>Roll</span>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let singleLvl of hpRolls">
+                        <td class="uk-text-small uk-text-center">
+                            {{singleLvl.lvl}}
+                        </td>
+                        <td class="uk-text-small uk-text-center">
+                            {{singleLvl.roll}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</app-modal>

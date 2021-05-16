@@ -1,0 +1,14 @@
+.money-box {
+    &.pp {
+        border: 1px solid #e5e4e2;
+    }
+    &.gp {
+        border: 1px solid #ffd700;
+    }
+    &.sp {
+        border: 1px solid #c0c0c0;
+    }
+    &.cp {
+        border: 1px solid #b87333;
+    }
+}

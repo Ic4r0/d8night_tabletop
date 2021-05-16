@@ -1,0 +1,248 @@
+<app-modal [container]="false" [loading]="loadingModal" #modal>
+  <div *ngIf="acValue" class="uk-modal-body" uk-overflow-auto>
+    <h2 class="uk-modal-title">
+      Armor Class
+    </h2>
+    <div class="uk-flex uk-flex-center uk-margin-top uk-margin-bottom">
+      <div class="uk-flex uk-flex-column uk-width-1-1 uk-width-2-3@s">
+        <div *ngIf="acValue.maxDex" class="uk-flex uk-flex-middle uk-flex-between uk-text-small uk-text-uppercase uk-margin-small-bottom">
+          <span>Max Dex</span>
+          <span>{{ getNumberSign(acValue.maxDex) }}</span>
+        </div>
+        <div class="uk-flex uk-flex-middle uk-flex-between uk-text-small uk-text-uppercase uk-margin-small-bottom">
+          <span class="uk-text-truncate">Arcane Spell Failure Chance</span>
+          <span>{{ acValue.spellFailure + ' %' }}</span>
+        </div>
+        <div class="uk-flex uk-flex-middle uk-flex-between uk-text-small uk-text-uppercase uk-margin-small-bottom">
+          <span class="uk-text-truncate">Check penalty</span>
+          <span>{{ getNumberSign(acValue.checkPenalty) }}</span>
+        </div>
+        <div class="uk-flex uk-flex-middle uk-flex-between uk-text-small uk-text-uppercase">
+          <span class="uk-text-truncate">Spell Resistance</span>
+          <span>{{ acValue.sr }}</span>
+        </div>
+      </div>
+    </div>
+    <form [formGroup]="tempModifiers">
+      <div class="uk-flex uk-flex-center">
+        <table class="uk-table uk-table-small uk-table-middle uk-table-justify uk-table-divider uk-width-1-1">
+          <thead>
+            <tr>
+              <th>
+                <div class="uk-flex uk-flex-middle uk-flex-center uk-text-small">
+                  <span>Bonus</span>
+                </div>
+              </th>
+              <th>
+                <div class="uk-flex uk-flex-middle uk-flex-center uk-text-small">
+                  <span>Value</span>
+                </div>
+              </th>
+              <th>
+                <div class="uk-flex uk-flex-middle uk-flex-center uk-text-small">
+                  <span>Temp</span>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="uk-text-small uk-text-center uk-text-uppercase">
+                Armor
+              </td>
+              <td class="uk-text-small uk-text-center">
+                {{acValue.armorBonus}}
+              </td>
+              <td class="uk-text-small uk-text-center">
+                <input class="uk-input uk-border-rounded input-width" type="number" formControlName="armorBonusTemp"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-center uk-text-uppercase">
+                Shield
+              </td>
+              <td class="uk-text-small uk-text-center">
+                {{acValue.shieldBonus}}
+              </td>
+              <td class="uk-text-small uk-text-center">
+                <input class="uk-input uk-border-rounded input-width" type="number" formControlName="shieldBonusTemp"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-center uk-text-uppercase">
+                Stat
+              </td>
+              <td class="uk-text-small uk-text-center">
+                {{acValue.statMod}}
+              </td>
+              <td class="uk-text-small uk-text-center">
+                <input class="uk-input uk-border-rounded input-width" type="number" formControlName="statModTemp"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-center uk-text-uppercase">
+                Size
+              </td>
+              <td class="uk-text-small uk-text-center">
+                {{acValue.sizeMod}}
+              </td>
+              <td class="uk-text-small uk-text-center">
+                <input class="uk-input uk-border-rounded input-width" type="number" formControlName="sizeModTemp"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-center uk-text-uppercase uk-text-truncate">
+                Natural Armor
+              </td>
+              <td class="uk-text-small uk-text-center">
+                {{acValue.naturalArmor}}
+              </td>
+              <td class="uk-text-small uk-text-center">
+                <input class="uk-input uk-border-rounded input-width" type="number" formControlName="naturalArmorTemp"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-center uk-text-uppercase uk-text-truncate">
+                Deflection
+              </td>
+              <td class="uk-text-small uk-text-center">
+                {{acValue.deflection}}
+              </td>
+              <td class="uk-text-small uk-text-center">
+                <input class="uk-input uk-border-rounded input-width" type="number" formControlName="deflectionTemp"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-center uk-text-uppercase">
+                Dodge
+              </td>
+              <td class="uk-text-small uk-text-center">
+                {{acValue.dodgeBonus}}
+              </td>
+              <td class="uk-text-small uk-text-center">
+                <input class="uk-input uk-border-rounded input-width" type="number" formControlName="dodgeBonusTemp"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-center uk-text-uppercase">
+                Class
+              </td>
+              <td class="uk-text-small uk-text-center">
+                {{acValue.classBonus}}
+              </td>
+              <td class="uk-text-small uk-text-center">
+                <input class="uk-input uk-border-rounded input-width" type="number" formControlName="classBonusTemp"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-center uk-text-uppercase">
+                Misc
+              </td>
+              <td class="uk-text-small uk-text-center">
+                {{acValue.misc}}
+              </td>
+              <td class="uk-text-small uk-text-center">
+                <input class="uk-input uk-border-rounded input-width" type="number" formControlName="miscTemp"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-center uk-text-uppercase">
+                Insight
+              </td>
+              <td class="uk-text-small uk-text-center">
+                {{acValue.insight}}
+              </td>
+              <td class="uk-text-small uk-text-center">
+                <input class="uk-input uk-border-rounded input-width" type="number" formControlName="insightTemp"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-center uk-text-uppercase">
+                Morale
+              </td>
+              <td class="uk-text-small uk-text-center">
+                {{acValue.morale}}
+              </td>
+              <td class="uk-text-small uk-text-center">
+                <input class="uk-input uk-border-rounded input-width" type="number" formControlName="moraleTemp"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-center uk-text-uppercase">
+                Sacred
+              </td>
+              <td class="uk-text-small uk-text-center">
+                {{acValue.sacred}}
+              </td>
+              <td class="uk-text-small uk-text-center">
+                <input class="uk-input uk-border-rounded input-width" type="number" formControlName="sacredTemp"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-center uk-text-uppercase">
+                Profane
+              </td>
+              <td class="uk-text-small uk-text-center">
+                {{acValue.profane}}
+              </td>
+              <td class="uk-text-small uk-text-center">
+                <input class="uk-input uk-border-rounded input-width" type="number" formControlName="profaneTemp"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-center uk-text-uppercase">
+                Total
+              </td>
+              <td class="uk-text-small uk-text-center uk-text-bold">
+                {{totalAC}}
+              </td>
+              <td class="uk-text-small uk-text-center">
+                -
+              </td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-center uk-text-uppercase">
+                Touch
+              </td>
+              <td class="uk-text-small uk-text-center uk-text-bold">
+                {{touchAC}}
+              </td>
+              <td class="uk-text-small uk-text-center">
+                -
+              </td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-center uk-text-uppercase uk-text-truncate">
+                Flat-footed
+              </td>
+              <td class="uk-text-small uk-text-center uk-text-bold">
+                {{flatAC}}
+              </td>
+              <td class="uk-text-small uk-text-center">
+                -
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+    <div *ngIf="checkDifferences()" class="uk-margin-top uk-grid-small uk-child-width-1-2@s" uk-grid>
+      <div>
+        <button
+          class="uk-align-center uk-button uk-button-default uk-border-rounded uk-modal-close uk-width-1-1"
+          type="button"
+          (click)="resetTable()">
+          Cancel
+        </button>
+      </div>
+      <div>
+        <button
+          class="uk-align-center uk-button uk-button-primary uk-border-rounded uk-width-1-1"
+          type="button"
+          (click)="editAC()">
+          Edit
+        </button>
+      </div>
+    </div>
+  </div>
+</app-modal>

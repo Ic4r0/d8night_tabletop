@@ -1,0 +1,18 @@
+@import 'variables';
+
+.save-button.uk-icon-button, .roll-button {
+  background-color: $tertiary-color;
+  color: white;
+  width: 60px;
+  height: 60px;
+  z-index: 5;
+  &:hover {
+    background-color: darken($tertiary-color, 10%);
+  }
+}
+
+@media (max-width: 639px) {
+  .save-button.uk-icon-button {
+    margin-bottom: 80px !important;
+  }
+}

@@ -1,0 +1,194 @@
+<div [ngClass]="{'not-desktop uk-padding-small uk-card uk-card-default uk-border-rounded': tablet || mobile}" class="uk-width-1-1">
+    <div *ngIf="mobile || tablet" class="uk-text-center uk-text-bolder uk-text-uppercase uk-margin-small-bottom">
+      Description
+    </div>
+    <div uk-filter="target: .js-filter">
+        <ul class="uk-subnav uk-subnav-pill">
+            <li class="uk-active" uk-filter-control><a href="#">All</a></li>
+            <li uk-filter-control="[data-tag='background']"><a href="#">Background</a></li>
+            <li uk-filter-control="[data-tag='characteristics']"><a href="#">Characteristics</a></li>
+            <li uk-filter-control="[data-tag='deity']"><a href="#">Deity</a></li>
+        </ul>
+        <ul class="js-filter uk-child-width-1-1" uk-grid>
+            <li data-tag="background">
+                <div class="uk-flex uk-flex-column">
+                    <span class="uk-text-uppercase uk-text-bolder uk-text-small uk-margin-small-bottom">
+                        Background
+                    </span>
+                    <span>
+                        {{ !!info.bio ? info.bio : '-' }}
+                    </span>
+                </div>
+            </li>
+            <li data-tag="characteristics">
+                <div class="uk-flex uk-flex-column">
+                    <span class="uk-text-uppercase uk-text-bolder uk-text-small uk-margin-small-bottom">
+                        Characteristics
+                    </span>
+                    <span class="uk-text-small">
+                        <div *ngIf="!!alignment && !!info" class="uk-child-width-1-3@s uk-grid-small" uk-grid>
+                            <div>
+                                <div class="uk-flex uk-flex-column">
+                                    <span class="uk-text-uppercase">
+                                        Alignment
+                                    </span>
+                                    <span>
+                                        {{ alignment }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="uk-flex uk-flex-column">
+                                    <span class="uk-text-uppercase">
+                                        Age
+                                    </span>
+                                    <span>
+                                        {{ !!info.age ? info.age : '-' }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="uk-flex uk-flex-column">
+                                    <span class="uk-text-uppercase">
+                                        Gender
+                                    </span>
+                                    <span>
+                                        {{ !!info.gender ? info.gender : '-' }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="uk-flex uk-flex-column">
+                                    <span class="uk-text-uppercase">
+                                        Height
+                                    </span>
+                                    <span>
+                                        {{ !!info.height ? info.height : '-' }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="uk-flex uk-flex-column">
+                                    <span class="uk-text-uppercase">
+                                        Weight
+                                    </span>
+                                    <span>
+                                        {{ !!info.weight ? info.weight : '-' }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="uk-flex uk-flex-column">
+                                    <span class="uk-text-uppercase">
+                                        Eyes
+                                    </span>
+                                    <span>
+                                        {{ !!info.appearance.eyes ? info.appearance.eyes : '-' }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="uk-flex uk-flex-column">
+                                    <span class="uk-text-uppercase">
+                                        Hair
+                                    </span>
+                                    <span>
+                                        {{ !!info.appearance.hair ? info.appearance.hair : '-' }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="uk-flex uk-flex-column">
+                                    <span class="uk-text-uppercase">
+                                        Skin
+                                    </span>
+                                    <span>
+                                        {{ !!info.appearance.skin ? info.appearance.skin : '-' }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="uk-flex uk-flex-column">
+                                    <span class="uk-text-uppercase">
+                                        Handed
+                                    </span>
+                                    <span>
+                                        {{ !!info.appearance.handed ? info.appearance.handed : '-' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </span>
+                </div>
+            </li>
+            <li data-tag="deity">
+                <div class="uk-flex uk-flex-column">
+                    <span class="uk-text-uppercase uk-text-bolder uk-text-small uk-margin-small-bottom">
+                        Deity
+                    </span>
+                    <span class="uk-text-small">
+                        <ul class="uk-list uk-list-collapse">
+                            <li>
+                                <span class="uk-text-uppercase uk-margin-small-right">
+                                    Name:
+                                </span>
+                                <span>
+                                    {{ !!deity?.name ? deity?.name : '-' }}
+                                </span>
+                            </li>
+                            <li>
+                                <span class="uk-text-uppercase uk-margin-small-right">
+                                    Title:
+                                </span>
+                                <span>
+                                    {{ !!deity?.title ? deity?.title : '-' }}
+                                </span>
+                            </li>
+                            <li>
+                                <span class="uk-text-uppercase uk-margin-small-right">
+                                    Alignment:
+                                </span>
+                                <span>
+                                    {{ !!deity?.alignment ? deity?.alignment : '-' }}
+                                </span>
+                            </li>
+                            <li>
+                                <span class="uk-text-uppercase uk-margin-small-right">
+                                    Description:
+                                </span>
+                                <span>
+                                    {{ !!deity?.description ? deity?.description : '-' }}
+                                </span>
+                            </li>
+                            <li>
+                                <span class="uk-text-uppercase uk-margin-small-right">
+                                    Domain list:
+                                </span>
+                                <span>
+                                    {{ !!deity?.domainlist ? deity?.domainlist : '-' }}
+                                </span>
+                            </li>
+                            <li>
+                                <span class="uk-text-uppercase uk-margin-small-right">
+                                    Favored weapon:
+                                </span>
+                                <span>
+                                    {{ !!deity?.favoredweapon ? deity?.favoredweapon : '-' }}
+                                </span>
+                            </li>
+                            <li>
+                                <span class="uk-text-uppercase uk-margin-small-right">
+                                    Holy item:
+                                </span>
+                                <span>
+                                    {{ !!deity?.holyitem ? deity?.holyitem : '-' }}
+                                </span>
+                            </li>
+                        </ul>
+                    </span>
+                </div>
+            </li>
+        </ul>
+    
+    </div>
+</div>

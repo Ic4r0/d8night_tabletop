@@ -1,0 +1,98 @@
+<div [ngClass]="{'not-desktop uk-padding-small uk-card uk-card-default uk-border-rounded': tablet || mobile}" class="uk-width-1-1 uk-text-small">
+  <div *ngIf="mobile || tablet" class="uk-text-center uk-text-bolder uk-text-uppercase uk-margin-small-bottom">
+    Extras
+  </div>
+  <div uk-filter="target: .js-filter">
+    <ul class="uk-subnav uk-subnav-pill">
+      <li class="uk-active" uk-filter-control><a href="#">All</a></li>
+      <li uk-filter-control="[data-tag='notes']"><a href="#">Notes</a></li>
+      <li uk-filter-control="[data-tag='companions']"><a href="#">Companions</a></li>
+    </ul>
+    <ul class="js-filter uk-child-width-1-1" uk-grid>
+      <li data-tag="notes">
+        <div class="uk-flex uk-flex-column">
+          <span class="uk-text-uppercase uk-text-bolder">
+            Notes
+          </span>
+          <textarea class="uk-width-1-1 uk-height-small uk-margin-small-top" [(ngModel)]="notesValue"></textarea>
+          <div *ngIf="notesValue != originalNotes" class="uk-margin-small-top uk-grid-small uk-child-width-1-2@s" uk-grid>
+            <div>
+              <button
+                class="uk-align-center uk-button uk-button-default uk-border-rounded uk-width-1-1"
+                type="button"
+                (click)="notesValue = originalNotes">
+                Cancel
+              </button>
+            </div>
+            <div>
+              <button
+                class="uk-align-center uk-button uk-button-primary uk-border-rounded uk-width-1-1"
+                type="button"
+                (click)="submitNotes()">
+                Edit
+              </button>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li data-tag="companions">
+        <div class="uk-flex uk-flex-column">
+          <div class="uk-flex uk-flex-middle">
+            <span class="uk-text-uppercase uk-text-bolder">
+              Companions
+            </span>
+            <a class="uk-icon-button uk-margin-left" uk-icon="plus-circle"
+              (click)="companionListModal.show()"></a>
+          </div>
+          <ul *ngIf="companionsIdxList.length > 0; else noCompanions"
+            class="uk-list uk-list-collapse uk-list-disc uk-margin-small-top">
+            <li *ngFor="let companionId of companionsIdxList"
+              class="uk-flex uk-flex-middle uk-flex-between uk-text-small">
+              <div class="uk-flex uk-flex-middle">
+                <b class="uk-margin-small-right uk-text-truncate">
+                  {{companionsValue[companionId].name}}
+                </b>
+                <i class="uk-visible@s">
+                  Lvl. {{companionsValue[companionId].level}}
+                </i>
+              </div>
+              <div class="uk-flex uk-flex-middle">
+                <span uk-icon="trash" (click)="removeCompanion(companionId)"
+                  class="clickable uk-margin-small-right uk-preserve-width"></span>
+                <span uk-icon="chevron-right" (click)="openCompanionTab(companionId)"
+                  class="clickable uk-preserve-width"></span>
+              </div>
+            </li>
+          </ul>
+          <ng-template #noCompanions>
+            <span class="uk-text-italic uk-margin-small-top">
+              This PC has no companions
+            </span>
+          </ng-template>
+        </div>
+      </li>
+    </ul>
+
+  </div>
+</div>
+
+<app-loading-overlay [loading]="loading"></app-loading-overlay>
+
+<app-modal [container]="false" [loading]="loadingModal" #removeCompanionModal>
+  <div *ngIf="!!selectedCompanion" class="uk-modal-body">
+    <button class="uk-modal-close-default" type="button" uk-close></button>
+    <p>Do you really want to remove {{selectedCompanion.name}} from your companions?</p>
+    <p class="uk-text-right">
+      <button class="uk-button uk-button-default uk-modal-close uk-border-rounded" type="button">Cancel</button>
+      <button class="uk-button uk-button-danger uk-border-rounded uk-margin-small-left" type="button" (click)="confirmRemoval()">
+        Remove
+      </button>
+    </p>
+  </div>
+</app-modal>
+
+<app-companions-list-modal
+  [campaign]="campaignValue"
+  [sheet]="sheetId"
+  #companionListModal
+></app-companions-list-modal>

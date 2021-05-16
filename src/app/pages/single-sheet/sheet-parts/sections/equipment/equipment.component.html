@@ -1,0 +1,198 @@
+<div *ngIf="!!equipmentValue" [ngClass]="{'not-desktop uk-padding-small uk-card uk-card-default uk-border-rounded': tablet || mobile}" class="uk-width-1-1 uk-text-small">
+    <div *ngIf="mobile || tablet" class="uk-text-center uk-text-bolder uk-text-uppercase uk-margin-small-bottom">
+      Equipment
+    </div>
+    <div uk-filter="target: .js-filter">
+        <ul class="uk-subnav uk-subnav-pill">
+            <li class="uk-active" uk-filter-control><a href="#">All</a></li>
+            <li uk-filter-control="[data-tag='weights']"><a href="#">Weights</a></li>
+            <li uk-filter-control="[data-tag='equipment']"><a href="#">Equipment</a></li>
+        </ul>
+        <ul class="js-filter uk-child-width-1-1" uk-grid>
+            <li data-tag="weights">
+                <div class="uk-flex uk-flex-column">
+                    <span class="uk-text-uppercase uk-text-bolder uk-margin-small-bottom">
+                        Weights
+                    </span>
+                    <span>
+                        <div class="uk-child-width-1-3@s uk-grid-small" uk-grid>
+                            <div>
+                                <div class="uk-flex uk-flex-column">
+                                    <span class="uk-text-uppercase">
+                                        Light
+                                    </span>
+                                    <span>
+                                        {{ equipmentValue.weightAllowance.light }} lbs
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="uk-flex uk-flex-column">
+                                    <span class="uk-text-uppercase">
+                                        Medium
+                                    </span>
+                                    <span>
+                                        {{ equipmentValue.weightAllowance.medium }} lbs
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="uk-flex uk-flex-column">
+                                    <span class="uk-text-uppercase">
+                                        Heavy
+                                    </span>
+                                    <span>
+                                        {{ equipmentValue.weightAllowance.heavy }} lbs
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="uk-flex uk-flex-column">
+                                    <span class="uk-text-uppercase">
+                                        Lift over head
+                                    </span>
+                                    <span>
+                                        {{ equipmentValue.weightAllowance.lift_over_head }} lbs
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="uk-flex uk-flex-column">
+                                    <span class="uk-text-uppercase">
+                                        Lift off ground
+                                    </span>
+                                    <span>
+                                        {{ equipmentValue.weightAllowance.lift_off_ground }} lbs
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="uk-flex uk-flex-column">
+                                    <span class="uk-text-uppercase">
+                                        Push/Drag
+                                    </span>
+                                    <span>
+                                        {{ equipmentValue.weightAllowance.push_drag }} lbs
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </span>
+                </div>
+            </li>
+            <li data-tag="equipment">
+                <div class="uk-flex uk-flex-column">
+                    <div class="uk-flex uk-flex-middle uk-text-uppercase uk-text-bolder uk-margin-small-bottom">
+                        <span>
+                            Equipment
+                        </span>
+                        <span
+                            class="clickable uk-margin-left"
+                            uk-icon="plus-circle"
+                            uk-tooltip="Add equipment"
+                            (click)="newEquipment()"
+                        ></span>
+                    </div>
+                    <div class="uk-flex uk-flex-middle uk-flex-between uk-flex-wrap" uk-grid>
+                        <div [ngClass]="{'uk-width-1-1': mobile}" class="uk-flex uk-flex-middle">
+                            <span class="uk-text-uppercase uk-margin-small-right">
+                                Weight carried:
+                            </span>
+                            <span [ngClass]="{'uk-text-success': currentLoad <= equipmentValue.weightAllowance.light,
+                                              'uk-text-warning': currentLoad > equipmentValue.weightAllowance.light &&
+                                                currentLoad <= equipmentValue.weightAllowance.medium,
+                                              'uk-text-danger': currentLoad > equipmentValue.weightAllowance.medium}">
+                                {{ equipmentValue.total.weight }}
+                            </span>
+                        </div>
+                        <div [ngClass]="{'uk-width-1-1 uk-margin-small-top': mobile}" class="uk-flex uk-flex-middle">
+                            <span class="uk-text-uppercase uk-margin-small-right">
+                                Money:
+                            </span>
+                            <span class="clickable" (click)="moneyModal.show()">
+                                {{ equipmentValue.gold }} gp
+                            </span>
+                        </div>
+                    </div>                    
+                    <table class="uk-margin-small-top uk-table uk-table-small uk-table-middle uk-table-justify uk-table-divider uk-width-1-1">
+                        <thead>
+                            <tr>
+                                <th class="uk-width-1-2">Name</th>
+                                <th class="uk-width-auto uk-text-truncate uk-visible@s">
+                                    <div class="uk-flex uk-flex-middle uk-flex-center">
+                                      <span>Quantity</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="uk-flex uk-flex-middle uk-flex-center">
+                                      <span>Actions</span>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let singleItem of equipmentValue.items">
+                                <td *ngIf="!singleItem.contents || singleItem.contents?.length === 0; else hasContents">
+                                    {{singleItem.name}}
+                                </td>
+                                <ng-template #hasContents>
+                                    <td class="uk-flex uk-flex-column">
+                                        <span>
+                                            {{singleItem.name}}
+                                        </span>
+                                        <ul class="uk-margin-small-left uk-margin-remove-vertical uk-list uk-list-collapse">
+                                            <li *ngFor="let content of singleItem.contents">
+                                                {{content}}    
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </ng-template>
+                                <td class="uk-text-center uk-visible@s">
+                                    {{singleItem.quantity}}
+                                </td>
+                                <td class="uk-text-center">
+                                    <span
+                                        class="uk-margin-small-right clickable"
+                                        uk-icon="info"
+                                        uk-tooltip="Info"
+                                        (click)="onSelectEquipment(singleItem, 'edit')"
+                                    ></span>
+                                    <span
+                                        class="clickable"
+                                        uk-icon="close"
+                                        uk-tooltip="Delete"
+                                        (click)="onSelectEquipment(singleItem, 'delete')"
+                                    ></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </li>
+        </ul>
+    
+    </div>
+</div>
+
+<app-edit-equip-modal
+    [campaign]="campaign"
+    [sheet]="sheet"
+    [mode]="operatingMode"
+    [item]="selectedEquipment"
+    [equipment]="equipmentValue?.items"
+    #editEquipModal
+></app-edit-equip-modal>
+
+<app-money-modal [wealth]="equipmentValue?.gold" #moneyModal></app-money-modal>
+
+<app-modal [container]="false" [loading]="loadingModal" #removeEquipModal>
+  <div *ngIf="!!selectedEquipment" class="uk-modal-body">
+    <button class="uk-modal-close-default" type="button" uk-close></button>
+    <h3 class="uk-modal-title">Warning</h3>
+    <p>Do you really want to delete <i>{{selectedEquipment.name}}</i>?</p>
+    <p class="uk-text-right">
+      <button class="uk-button uk-button-default uk-modal-close uk-border-rounded" type="button">Cancel</button>
+      <button class="uk-button uk-button-danger uk-border-rounded uk-margin-small-left" type="button" (click)="deleteEquipment()">Confirm</button>
+    </p>
+  </div>
+</app-modal>

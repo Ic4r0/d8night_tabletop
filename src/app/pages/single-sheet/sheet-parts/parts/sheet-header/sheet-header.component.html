@@ -1,0 +1,48 @@
+<div class="uk-flex uk-flex-middle uk-flex-between uk-margin-small-bottom uk-light">
+    <div class="uk-width-expand">
+        <h3 class="uk-card-title uk-margin-small-bottom">{{currentSheet.name}}</h3>
+        <p class="uk-text-meta uk-text-small uk-margin-small-top uk-margin-remove-bottom">
+            {{currentSheet.race}}, {{classes}}
+        </p>
+        <p class="uk-text-small uk-margin-remove-vertical">
+            Level {{currentSheet.level}}
+        </p>
+    </div>
+    <div class="uk-flex uk-flex-middle uk-width-auto uk-padding-small-left">
+        <app-svg (click)="onConditions()" [name]="'utils/conditions'" [width]="30" [attr.uk-tooltip]="'Conditions'"
+            class="uk-visible@s uk-hidden@m clickable">
+        </app-svg>
+        <app-svg (click)="onRest()" [name]="'utils/rest'" [width]="30" [attr.uk-tooltip]="'Rest'"
+            class="uk-hidden@m uk-margin-small-left clickable">
+        </app-svg>
+        <button class="rest-condition-button uk-button uk-button-default uk-border-rounded uk-visible@m"
+            (click)="onConditions()">
+            <app-svg [name]="'utils/conditions'" [width]="20" class="uk-margin-small-right">
+            </app-svg>
+            Conditions
+        </button>
+        <button
+            class="rest-condition-button uk-button uk-button-default uk-border-rounded uk-visible@m uk-margin-small-left"
+            (click)="onRest()">
+            <app-svg [name]="'utils/rest'" [width]="20" class="uk-margin-small-right">
+            </app-svg>
+            Rest
+        </button>
+        <div class="uk-text-center uk-margin-small-left uk-hidden@m clickable" (click)="openHPModal()">
+            <h4 class="uk-margin-small-bottom uk-flex uk-flex-middle">
+                <span [ngClass]="{'uk-text-success': currentHp >= 0, 'uk-text-danger': currentHp < 0}">
+                    {{currentHp}}
+                </span>
+                <span class="uk-margin-small-left uk-margin-small-right">
+                    /
+                </span>
+                <span [ngClass]="{'uk-text-success': currentHp >= 0, 'uk-text-danger': currentHp < 0}">
+                    {{maxHp}}
+                </span>
+            </h4>
+            <p class="uk-text-meta uk-text-small uk-text-uppercase uk-margin-small-top uk-margin-remove-bottom">
+                Hit points
+            </p>
+        </div>
+    </div>
+</div>

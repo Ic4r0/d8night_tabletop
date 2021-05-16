@@ -1,0 +1,36 @@
+<app-modal [container]="false" #modal>
+  <div *ngIf="spell" class="uk-modal-body" uk-overflow-auto>
+    <button class="uk-modal-close-default" type="button" uk-close></button>
+    <h2 class="uk-modal-title">
+        {{spell.name}}
+    </h2>
+    <div class="uk-flex uk-flex-column uk-margin-small-top uk-text-small">
+      <span><b>School</b> {{spell.school}}</span>
+
+      <span class="uk-margin-small-top uk-margin-small-bottom borders uk-text-uppercase">
+        Casting
+      </span>
+      <span><b>Caster Level</b> {{!!spell.casterLevel ? spell.casterLevel : '-'}}</span>
+      <span><b>Concentration</b> {{!!spell.concentration ? spell.concentration : '-'}}</span>
+      <span><b>Casting Time</b> {{!!spell.castingtime ? spell.castingtime : '-'}}</span>
+      <span><b>Components</b> {{!!spell.components ? spell.components : '-'}}</span>
+
+      <span class="uk-margin-small-top uk-margin-small-bottom borders uk-text-uppercase">
+        Effect
+      </span>
+      <span><b>Effect</b> {{!!spell.effect ? spell.effect : '-'}}</span>
+      <span><b>Target</b> {{!!spell.target ? spell.target : '-'}}</span>
+      <span><b>Range</b> {{!!spell.range ? spell.range : '-'}}</span>
+      <span><b>Duration</b> {{!!spell.duration ? spell.duration : '-'}}</span>
+      <span>
+        <b>Saving Throw</b> {{!!spell.saveInfo ? spell.saveInfo: '-'}}{{!!spell.dc || spell.dc === 0 ? '; ' + spell.dc : ''}}
+      </span>
+      <span><b>Spell Resistance</b> {{spell.spellResistance}}</span>
+
+      <span class="uk-margin-small-top uk-margin-small-bottom borders uk-text-uppercase">
+        Description
+      </span>
+      <span>{{!!spell.description ? spell.description : '-'}}</span>
+    </div>
+  </div>
+</app-modal>

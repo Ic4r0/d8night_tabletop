@@ -1,0 +1,75 @@
+<app-modal [container]="false" [loading]="loadingModal" #modal>
+  <div *ngIf="initiativeValue" class="uk-modal-body" uk-overflow-auto>
+    <h2 class="uk-modal-title">
+      Initiative
+    </h2>
+    <form [formGroup]="tempModifier">
+      <div class="uk-flex uk-flex-center">
+        <table class="uk-table uk-table-small uk-table-middle uk-table-justify uk-table-divider uk-width-1-1">
+          <thead>
+            <tr>
+              <th>
+                <div class="uk-flex uk-flex-middle uk-flex-center uk-text-small">
+                  <span>Total</span>
+                </div>
+              </th>
+              <th>
+                <div class="uk-flex uk-flex-middle uk-flex-center uk-text-small">
+                  <span>Dex</span>
+                </div>
+              </th>
+              <th>
+                <div class="uk-flex uk-flex-middle uk-flex-center uk-text-small">
+                  <span>Misc</span>
+                </div>
+              </th>
+              <th class="uk-table-shrink">
+                <div class="uk-flex uk-flex-middle uk-flex-center uk-text-small">
+                  <span>Temp</span>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="uk-text-small uk-text-center">
+                {{
+                  initiativeValue.dexMod +
+                  initiativeValue.miscMod +
+                  initiativeValue.tempMod
+                }}
+              </td>
+              <td class="uk-text-small uk-text-center">
+                {{initiativeValue.dexMod}}
+              </td>
+              <td class="uk-text-small uk-text-center">
+                {{initiativeValue.miscMod}}
+              </td>
+              <td class="uk-text-small">
+                <input class="uk-input uk-border-rounded input-width" type="number" formControlName="temp"/>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+    <div *ngIf="checkDifferences()" class="uk-margin-top uk-grid-small uk-child-width-1-2@s" uk-grid>
+      <div>
+        <button
+          class="uk-align-center uk-button uk-button-default uk-border-rounded uk-modal-close uk-width-1-1"
+          type="button"
+          (click)="resetTable()">
+          Cancel
+        </button>
+      </div>
+      <div>
+        <button
+          class="uk-align-center uk-button uk-button-primary uk-border-rounded uk-width-1-1"
+          type="button"
+          (click)="editInitiative()">
+          Edit
+        </button>
+      </div>
+    </div>
+  </div>
+</app-modal>

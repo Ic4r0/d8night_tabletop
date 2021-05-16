@@ -1,0 +1,15 @@
+
+<app-modal [container]="false" #modal>
+  <div class="uk-modal-body" uk-overflow-auto>
+    <div class="uk-grid-small uk-grid-match uk-grid-divider uk-child-width-1-1" uk-grid>
+      <div>
+        <h2 class="uk-modal-title">{{aboveValue.title}}</h2>
+        <div class="uk-text-small">{{aboveValue.text}}</div>
+      </div>
+      <div>
+        <h2 class="uk-modal-title">{{belowValue.title}}</h2>
+        <div class="uk-text-small">{{belowValue.text}}</div>
+      </div>
+    </div>
+  </div>
+</app-modal>

@@ -1,0 +1,11 @@
+<div class="uk-flex uk-flex-middle uk-flex-center uk-flex-wrap uk-text-center">
+    <input
+        *ngFor="let singleCheckbox of isChecked | keyvalue"
+        class="uk-checkbox uk-border-rounded"
+        [ngClass]="{'uk-margin-small-right': isNotLastCheckbox(singleCheckbox.key)}"
+        type="checkbox"
+        (click)="onTickCheckbox(singleCheckbox.key)"
+        [checked]="singleCheckbox.value"
+    >
+    <span *ngIf="!!text" class="uk-margin-left uk-text-small">{{ text }}</span>
+</div>

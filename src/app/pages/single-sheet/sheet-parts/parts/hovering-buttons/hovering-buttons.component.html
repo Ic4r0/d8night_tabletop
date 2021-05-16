@@ -1,0 +1,9 @@
+<div class="uk-position-bottom-right uk-flex uk-flex-column uk-flex-center uk-margin-right uk-visible@s">
+    <div class="roll-button uk-margin-bottom uk-border-circle clickable uk-flex uk-flex-middle uk-flex-center"
+        (click)="onRoll()">
+        <app-svg [name]="'utils/dice'" [width]="40" [attr.uk-tooltip]="'Roll'">
+        </app-svg>
+    </div>
+    <a class="save-button uk-margin-bottom uk-icon-button uk-hidden@m" uk-icon="icon: more-vertical; ratio: 2"
+        uk-tooltip="Sections" (click)="onSectionChange()"></a>
+</div>

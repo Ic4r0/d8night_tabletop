@@ -1,0 +1,97 @@
+<app-modal [container]="false" [loading]="loadingModal" #modal>
+  <div class="uk-modal-body" uk-overflow-auto>
+    <h2 class="uk-modal-title">Ability scores</h2>
+    <form [formGroup]="tempModifiers">
+      <div class="uk-flex uk-flex-center">
+        <table class="uk-table uk-table-small uk-table-middle uk-table-justify uk-table-divider uk-width-1-1">
+          <thead>
+            <tr>
+              <th class="uk-text-small uk-width-1-3"></th>
+              <th class="uk-text-small uk-width-1-6">Score</th>
+              <th class="uk-text-small uk-width-1-6">Mod</th>
+              <th class="uk-text-small uk-width-1-6">Temp score</th>
+              <th class="uk-text-small uk-width-1-6">Temp mod</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="uk-text-small uk-text-uppercase uk-text-truncate">Strength</td>
+              <td class="uk-text-small uk-text-center">{{ abilityScores['Strength'].score }}</td>
+              <td class="uk-text-small uk-text-center">{{ mod(abilityScores['Strength'].score) }}</td>
+              <td>
+                <input class="uk-input uk-border-rounded" type="number" formControlName="str"/>
+              </td>
+              <td class="uk-text-small uk-text-center">{{ !!str ? mod(str) : '-' }}</td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-uppercase uk-text-truncate">Dexterity</td>
+              <td class="uk-text-small uk-text-center">{{ abilityScores['Dexterity'].score }}</td>
+              <td class="uk-text-small uk-text-center">{{ mod(abilityScores['Dexterity'].score) }}</td>
+              <td>
+                <input class="uk-input uk-border-rounded" type="number" formControlName="dex"/>
+              </td>
+              <td class="uk-text-small uk-text-center">{{ !!dex ? mod(dex) : '-' }}</td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-uppercase uk-text-truncate">Constitution</td>
+              <td class="uk-text-small uk-text-center">{{ abilityScores['Constitution'].score }}</td>
+              <td class="uk-text-small uk-text-center">{{ mod(abilityScores['Constitution'].score) }}</td>
+              <td>
+                <input class="uk-input uk-border-rounded" type="number" formControlName="con"/>
+              </td>
+              <td class="uk-text-small uk-text-center">{{ !!con ? mod(con) : '-' }}</td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-uppercase uk-text-truncate">Intelligence</td>
+              <td class="uk-text-small uk-text-center">{{ abilityScores['Intelligence'].score }}</td>
+              <td class="uk-text-small uk-text-center">{{ mod(abilityScores['Intelligence'].score) }}</td>
+              <td>
+                <input class="uk-input uk-border-rounded" type="number" formControlName="int"/>
+              </td>
+              <td class="uk-text-small uk-text-center">{{ !!int ? mod(int) : '-' }}</td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-uppercase uk-text-truncate">Wisdom</td>
+              <td class="uk-text-small uk-text-center">{{ abilityScores['Wisdom'].score }}</td>
+              <td class="uk-text-small uk-text-center">{{ mod(abilityScores['Wisdom'].score) }}</td>
+              <td>
+                <input class="uk-input uk-border-rounded" type="number" formControlName="wis"/>
+              </td>
+              <td class="uk-text-small uk-text-center">{{ !!wis ? mod(wis) : '-' }}</td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-uppercase uk-text-truncate">Charisma</td>
+              <td class="uk-text-small uk-text-center">{{ abilityScores['Charisma'].score }}</td>
+              <td class="uk-text-small uk-text-center">{{ mod(abilityScores['Charisma'].score) }}</td>
+              <td>
+                <input class="uk-input uk-border-rounded" type="number" formControlName="cha"/>
+              </td>
+              <td class="uk-text-small uk-text-center">{{ !!cha ? mod(cha) : '-' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+    <div *ngIf="!tempModifiers.valid" class="uk-text-small uk-text-danger uk-text-center">
+      It's not possible to set negative values
+    </div>
+    <div *ngIf="checkDifferences()" class="uk-margin-top uk-grid-small uk-child-width-1-2@s" uk-grid>
+      <div>
+        <button
+          class="uk-align-center uk-button uk-button-default uk-border-rounded uk-modal-close uk-width-1-1"
+          type="button"
+          (click)="resetTable()">
+          Cancel
+        </button>
+      </div>
+      <div>
+        <button
+          class="uk-align-center uk-button uk-button-primary uk-border-rounded uk-width-1-1"
+          type="button"
+          (click)="editAbilitiesScores()">
+          Edit
+        </button>
+      </div>
+    </div>
+  </div>
+</app-modal>

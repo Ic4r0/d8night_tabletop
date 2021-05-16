@@ -1,0 +1,54 @@
+<app-modal [container]="false" #modal>
+  <div class="uk-modal-body" uk-overflow-auto>
+    <h2 class="uk-modal-title">Movements</h2>
+    <div class="uk-flex uk-flex-center">
+      <table class="uk-table uk-table-small uk-table-middle uk-table-justify uk-table-divider uk-width-1-1">
+        <thead>
+          <tr>
+            <th class="uk-width-1-3 uk-width-1-2@s">
+              <div class="uk-flex uk-flex-middle uk-flex-center uk-text-small">
+                <span>Type</span>
+              </div>
+            </th>
+            <th class="uk-width-1-3 uk-width-1-4@s">
+              <div class="uk-flex uk-flex-middle uk-flex-center uk-text-small">
+                <span>Speed</span>
+              </div>
+            </th>
+            <th class="uk-width-1-3 uk-width-1-4@s">
+              <div class="uk-flex uk-flex-middle uk-flex-center uk-text-small">
+                <span>Steps</span>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let move of movementList">
+            <td>
+              <div class="uk-flex uk-flex-middle uk-flex-center uk-text-small">
+                <app-svg
+                  class="uk-hidden@s"
+                  [name]="'movement/' + move.name.toLowerCase()"
+                  [width]="30"
+                  [attr.uk-tooltip]="move.name"
+                ></app-svg>
+                <span class="uk-visible@s">{{ move.name }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="uk-flex uk-flex-middle uk-flex-center uk-text-small">
+                <span class="">{{ move.rate }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="uk-flex uk-flex-middle uk-flex-center uk-text-small">
+                <span>{{ move.squares }}</span>
+                <span class="uk-margin-small-left" uk-icon="thumbnails"></span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</app-modal>

@@ -1,0 +1,68 @@
+<div class="uk-width-1-1">
+    <div class="uk-grid-small uk-grid-match" uk-grid>
+        <div class="uk-width-1-4">
+            <div
+                class="uk-card uk-card-default uk-border-rounded uk-padding-small uk-flex uk-flex-column uk-flex-middle uk-text-center">
+                <div class="uk-text-meta uk-text-small uk-text-uppercase clickable" (click)="onOpenInitiativeModal()">
+                    Initiative
+                </div>
+                <h4 class="uk-margin-small-top uk-margin-small-bottom clickable"
+                    (click)="rollDice.rollD20(1, initiative, 'Initiative')">
+                    <span class="uk-text-bold">{{initiative}}</span>
+                </h4>
+                <div class="uk-text-bolder uk-text-uppercase uk-invisible">
+                    Initiative
+                </div>
+            </div>
+        </div>
+        <div class="uk-width-1-4">
+            <div class="uk-card uk-card-default uk-border-rounded uk-padding-small uk-flex uk-flex-column uk-flex-middle uk-text-center clickable"
+                (click)="onOpenACModal()">
+                <div class="uk-text-meta uk-text-small uk-text-uppercase">
+                    Armor
+                </div>
+                <h4 class="uk-margin-small-top uk-margin-small-bottom">
+                    <span class="uk-text-bold">{{ac}}</span>
+                </h4>
+                <div class="uk-text-bolder uk-text-uppercase">
+                    Class
+                </div>
+            </div>
+        </div>
+        <div class="uk-width-1-2">
+            <div class="uk-card uk-card-default uk-border-rounded uk-padding-small clickable"
+                (click)="onOpenDefSensesModal()">
+                <div class="uk-child-width-1-2 uk-grid-small uk-grid-match uk-grid-divider" uk-grid>
+                    <div>
+                        <div class="uk-flex uk-flex-column">
+                            <div class="uk-text-meta uk-text-small uk-text-uppercase">
+                                Defenses
+                            </div>
+                            <div class="uk-text-small uk-margin-small-top uk-margin-small-bottom truncate-long-text">
+                                {{
+                                    !!defenses ?
+                                        defenses.join(', ') :
+                                        'You have no resistances or immunities'
+                                }}
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="uk-flex uk-flex-column">
+                            <div class="uk-text-meta uk-text-small uk-text-uppercase">
+                                Senses
+                            </div>
+                            <div class="uk-text-small uk-margin-small-top uk-margin-small-bottom truncate-long-text">
+                                {{
+                                    !!senses ?
+                                        senses :
+                                        'You have no specific senses'
+                                }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

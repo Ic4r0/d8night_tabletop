@@ -1,0 +1,195 @@
+<div [ngClass]="{'not-desktop uk-padding-small uk-card uk-card-default uk-border-rounded': tablet || mobile}" class="uk-width-1-1 uk-text-small">
+  <div *ngIf="mobile || tablet" class="uk-text-center uk-text-bolder uk-text-uppercase uk-margin-small-bottom">
+    Actions
+  </div>
+  <div uk-filter="target: .js-filter">
+    <ul class="uk-subnav uk-subnav-pill">
+      <li class="uk-active" uk-filter-control><a href="#">All</a></li>
+      <li *ngIf="!!unarmedValue" uk-filter-control="[data-tag='unarmed']"><a href="#">Unarmed</a></li>
+      <li uk-filter-control="[data-tag='weapons']"><a href="#">Weapons</a></li>
+      <li *ngIf="!!specialAttacks" uk-filter-control="[data-tag='special']"><a href="#">Special Attacks</a></li>
+    </ul>
+    <ul class="js-filter uk-child-width-1-1" uk-grid>
+      <li *ngIf="!!unarmedValue" data-tag="unarmed">
+        <div class="uk-flex uk-flex-column">
+          <span class="uk-text-uppercase uk-text-bolder">
+            Unarmed
+          </span>
+          <table class="uk-table uk-table-small uk-table-justify uk-table-middle uk-table-divider uk-width-1-1 uk-text-small">
+            <thead>
+              <tr>
+                <th>Attack</th>
+                <th class="uk-visible@s">
+                  <div class="uk-flex uk-flex-middle uk-flex-center">
+                    <span>Reach</span>
+                  </div>
+                </th>
+                <th>
+                  <div class="uk-flex uk-flex-middle uk-flex-center">
+                    <span>To Hit</span>
+                  </div>
+                </th>
+                <th>
+                  <div class="uk-flex uk-flex-middle uk-flex-center">
+                    <span>Damage</span>
+                  </div>
+                </th>
+                <th>
+                  <div class="uk-flex uk-flex-middle uk-flex-center">
+                    <span>Notes</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="clickable" (click)="openWeapon(true)">Unarmed</td>
+                <td class="uk-visible@s">
+                  <div class="uk-flex uk-flex-middle uk-flex-center">
+                    <span>{{unarmedValue.reach}}</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="uk-flex uk-flex-middle uk-flex-center clickable"
+                    (click)="rollService.rollD20(1, unarmedToHit.numberValue, 'Unarmed strike')">
+                    <span>{{unarmedToHit.stringValue}}</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="uk-flex uk-flex-middle uk-flex-center clickable"
+                    (click)="rollService.parseRoll(unarmedValue.damage, 'Damage')">
+                    <span>{{unarmedValue.damage}}</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="uk-flex uk-flex-middle uk-flex-center">
+                    <input
+                      class="uk-checkbox uk-border-rounded"
+                      type="checkbox"
+                      [checked]="!!unarmedValue.notes"
+                      disabled
+                    >
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </li>
+      <li data-tag="weapons">
+        <div class="uk-flex uk-flex-column">
+          <span class="uk-text-uppercase uk-text-bolder">
+            Weapons
+          </span>
+          <table *ngIf="!!weaponsToHit; else noWeapons"
+            class="uk-table uk-table-small uk-table-justify uk-table-middle uk-table-divider uk-width-1-1 uk-text-small">
+            <thead>
+              <tr>
+                <th>Attack</th>
+                <th class="uk-visible@s">
+                  <div class="uk-flex uk-flex-middle uk-flex-center">
+                    <span>Crit</span>
+                  </div>
+                </th>
+                <th>
+                  <div class="uk-flex uk-flex-middle uk-flex-center">
+                    <span>To Hit</span>
+                  </div>
+                </th>
+                <th>
+                  <div class="uk-flex uk-flex-middle uk-flex-center">
+                    <span>Damage</span>
+                  </div>
+                </th>
+                <th>
+                  <div class="uk-flex uk-flex-middle uk-flex-center">
+                    <span>Notes</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let singleWeapon of weaponsValue">
+                <td class="clickable" (click)="openWeapon(false, singleWeapon)">{{singleWeapon.common.name}}</td>
+                <td class="uk-visible@s">
+                  <div class="uk-flex uk-flex-middle uk-flex-center">
+                    <span>{{singleWeapon.common.critical}}</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="uk-flex uk-flex-middle uk-flex-center clickable"
+                    (click)="rollService.rollD20(
+                      1,
+                      weaponsToHit[singleWeapon.common.name].numberValue,
+                      singleWeapon.common.name
+                    )">
+                    <span>{{weaponsToHit[singleWeapon.common.name].stringValue}}</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="uk-flex uk-flex-middle uk-flex-center clickable"
+                    (click)="rollService.parseRoll(singleWeapon.common.damage, 'Damage')">
+                    <span>{{singleWeapon.common.damage}}</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="uk-flex uk-flex-middle uk-flex-center">
+                    <input
+                      class="uk-checkbox uk-border-rounded"
+                      type="checkbox"
+                      [checked]="!!singleWeapon.common.notes"
+                      disabled
+                    >
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <ng-template #noWeapons>
+            <span class="uk-text-italic uk-margin-small-top">
+              This PC has no weapons
+            </span>
+          </ng-template>
+        </div>
+      </li>
+      <li *ngIf="!!specialAttacks" data-tag="special">
+        <div class="uk-flex uk-flex-column">
+          <span class="uk-text-uppercase uk-text-bolder uk-margin-small-bottom">
+            Special Attacks
+          </span>
+          <div class="uk-flex uk-flex-column">
+            <div
+              *ngFor="let singleAttack of specialAttacks"
+              class="uk-flex uk-flex-column">
+              <span class="uk-text-uppercase uk-text-bold">
+                {{ singleAttack.name }}
+              </span>
+              <ul class="uk-list uk-list-collapse uk-margin-remove-vertical">
+                <li>
+                  <span class="uk-text-uppercase">
+                    Description:
+                  </span>
+                  <span>
+                    {{ singleAttack.description }}
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+
+  </div>
+</div>
+
+<app-loading-overlay [loading]="loading"></app-loading-overlay>
+
+<app-weapon-details-modal
+  [campaign]="campaign"
+  [sheet]="sheet"
+  [weapon]="selectedWeapon"
+  [bab]="babValue"
+  [list]="weaponsValue"
+  #weaponDetailModal
+></app-weapon-details-modal>

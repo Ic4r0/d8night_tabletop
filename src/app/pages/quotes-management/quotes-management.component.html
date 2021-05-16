@@ -1,0 +1,71 @@
+<div class="page page-with-footer uk-light">
+
+  <!-- BREADCRUMB -->
+  <app-breadcrumb [list]="breadcrumb"></app-breadcrumb>
+
+  <div class="uk-search uk-search-default uk-align-center uk-margin-small uk-width-5-6 uk-width-3-4@s uk-width-1-3@m">
+    <span class="uk-search-icon-flip" uk-search-icon></span>
+    <input class="uk-search-input uk-border-rounded" type="search" placeholder="Search..." (keyup)="search($event)">
+  </div>
+
+  <button class="uk-align-center uk-margin-small-top uk-width-5-6 uk-width-3-4@s uk-width-1-3@m uk-button uk-button-default uk-border-rounded" (click)="selectQuote({id: null, quote: ''})">
+    <span uk-icon="file-edit" class="uk-margin-small-right"></span> Add quote
+  </button>
+
+  <div class="uk-width-5-6 uk-align-center uk-margin-small-top">
+    <ul class="uk-list uk-list-divider" *ngIf="quotesListFiltered.length > 0; else noQuotes">
+      <li *ngFor="let singleQuote of quotesListFiltered | paginate: { itemsPerPage: 10, currentPage: page }" (click)="selectQuote(singleQuote)" style="cursor: pointer;">
+        {{singleQuote.quote}}
+      </li>
+    </ul>
+    <ng-template #noQuotes>
+      <ul class="uk-list uk-list-divider">
+        <li>No result</li>
+      </ul>
+    </ng-template>
+
+    <div class="uk-flex uk-flex-between uk-flex-middle uk-flex-wrap light-pagination">
+      <span class="uk-width-1-1 uk-width-auto@m uk-flex uk-flex-center uk-margin-small-top">
+        {{quotesListFiltered.length}} result{{quotesListFiltered.length === 1 ? '' : 's'}}
+      </span>
+      <pagination-controls
+        *ngIf="quotesListFiltered.length > 0"
+        class="uk-width-1-1 uk-width-auto@m uk-flex uk-flex-center uk-margin-small-top"
+        (pageChange)="page = $event"
+        previousLabel="Prev."
+        nextLabel="Next"
+        screenReaderPaginationLabel="Pagination"
+        screenReaderPageLabel="page"
+        screenReaderCurrentLabel="On page">
+      </pagination-controls>
+    </div>
+  </div>
+</div>
+
+<app-mobile-footer class="uk-hidden@s" [buttons]="footerButtons" (label)="onFooterClicked($event)"></app-mobile-footer>
+
+<app-modal [container]="false" [loading]="loadingModal" #quoteModal>
+  <div class="uk-modal-body">
+    <h3 *ngIf="selectedQuote" class="uk-modal-title">{{selectedQuote.id ? 'Edit quote' : 'New quote'}}</h3>
+    <textarea class="uk-textarea" rows="4" [(ngModel)]="editedQuote">
+    </textarea>
+    <div *ngIf="selectedQuote" class="uk-margin-top uk-text-right">
+      <ng-container *ngIf="selectedQuote.id !== null; else newQuote">
+        <button class="uk-button uk-button-default uk-border-rounded"
+          type="button" (click)="editQuote()" uk-tooltip="Edit quote">
+          <span uk-icon="pencil"></span>
+        </button>
+        <button class="uk-button uk-button-danger uk-border-rounded uk-margin-small-left"
+          type="button" (click)="deleteQuote()" uk-tooltip="Delete quote">
+          <span uk-icon="trash"></span>
+        </button>
+      </ng-container>
+      <ng-template #newQuote>
+        <button class="uk-button uk-button-default uk-border-rounded"
+          type="button" (click)="addQuote()" uk-tooltip="Add quote">
+          <span uk-icon="plus"></span>
+        </button>
+      </ng-template>
+    </div>
+  </div>
+</app-modal>

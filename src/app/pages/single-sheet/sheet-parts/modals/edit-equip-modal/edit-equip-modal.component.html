@@ -1,0 +1,133 @@
+<app-modal [container]="false" [loading]="loadingModal" (closing)="reset()" #modal>
+    <div class="uk-modal-body" uk-overflow-auto>
+        <h2 class="uk-modal-title">
+            {{operatingMode === editEquipEnum.EDIT ? 'Edit item' : 'New Item'}}
+        </h2>
+        <form [formGroup]="equip">
+            <div class="uk-flex uk-flex-center">
+                <table class="uk-table uk-table-small uk-table-middle uk-table-justify uk-table-divider uk-width-1-1">
+                    <tbody>
+                        <tr>
+                            <td class="uk-text-small uk-text-uppercase uk-table-shrink">
+                                Name
+                            </td>
+                            <td class="uk-text-small uk-table-expand">
+                                <input class="uk-input uk-border-rounded uk-width-1-1" type="text"
+                                    required formControlName="name"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="uk-text-small uk-text-uppercase uk-table-shrink">
+                                Charges
+                            </td>
+                            <td class="uk-text-small uk-table-expand">
+                                <input class="uk-input uk-border-rounded uk-width-1-1" type="number"
+                                    formControlName="charges"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="uk-text-small uk-text-uppercase uk-table-shrink">
+                                Charges used
+                            </td>
+                            <td class="uk-text-small uk-table-expand">
+                                <input class="uk-input uk-border-rounded uk-width-1-1" type="number"
+                                    formControlName="chargesUsed"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="uk-text-small uk-text-uppercase uk-table-shrink">
+                                Charges max
+                            </td>
+                            <td class="uk-text-small uk-table-expand">
+                                <input class="uk-input uk-border-rounded uk-width-1-1" type="number"
+                                    formControlName="chargesMax"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="uk-text-small uk-text-uppercase uk-table-shrink">
+                                Contents
+                            </td>
+                            <td class="uk-text-small uk-table-expand">
+                                <div *ngIf="contents.value.length > 0; else noContents" class="uk-flex uk-flex-column">
+                                    <div formArrayName="contents">
+                                        <div class="uk-flex uk-flex-middle uk-width-1-1"
+                                            [ngClass]="{'uk-margin-small-top': i !== 0}"
+                                            [formGroupName]="i"
+                                            *ngFor="let content of contents.controls; let i = index">
+                                            <input class="uk-input uk-border-rounded uk-width-expand" type="text"
+                                                formControlName="item" placeholder="Q. item name"/>
+                                            <span *ngIf="i === contents.value.length - 1" 
+                                                class="uk-icon-button uk-margin-small-left uk-preserve-width"
+                                                uk-icon="plus-circle"
+                                                (click)="addContent()"></span>
+                                            <span (click)="removeContent(i)"
+                                                class="uk-icon-button uk-margin-small-left uk-preserve-width"
+                                                uk-icon="minus-circle"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ng-template #noContents>
+                                    <div class="uk-flex uk-flex-middle clickable" (click)="addContent()">
+                                        <span class="uk-margin-small-right">Add content</span>
+                                        <span uk-icon="plus-circle"></span>
+                                    </div>
+                                </ng-template>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="uk-text-small uk-text-uppercase uk-table-shrink">
+                                Cost
+                            </td>
+                            <td class="uk-text-small uk-table-expand">
+                                <input class="uk-input uk-border-rounded uk-width-1-1" type="number"
+                                    formControlName="cost"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="uk-text-small uk-text-uppercase uk-table-shrink">
+                                Quantity
+                            </td>
+                            <td class="uk-text-small uk-table-expand">
+                                <input class="uk-input uk-border-rounded uk-width-1-1" type="number"
+                                    formControlName="quantity" required/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="uk-text-small uk-text-uppercase uk-table-shrink">
+                                Size
+                            </td>
+                            <td class="uk-text-small uk-table-expand">
+                                <input class="uk-input uk-border-rounded uk-width-1-1" type="text"
+                                    formControlName="size"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="uk-text-small uk-text-uppercase uk-table-shrink">
+                                Special properties
+                            </td>
+                            <td class="uk-text-small uk-table-expand">
+                                <input class="uk-input uk-border-rounded uk-width-1-1" type="text"
+                                    formControlName="specialProperties"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+        <div *ngIf="checkDifferences()" class="uk-margin-top uk-grid-small uk-child-width-1-2@s" uk-grid>
+            <div>
+                <button
+                    class="uk-align-center uk-button uk-button-default uk-border-rounded uk-modal-close uk-width-1-1"
+                    type="button" (click)="modal.hide()">
+                    Cancel
+                </button>
+            </div>
+            <div>
+                <button class="uk-align-center uk-button uk-button-primary uk-border-rounded uk-width-1-1" type="button"
+                    (click)="submit()">
+                    {{!!originalItem ? 'Edit' : 'Add'}}
+                </button>
+            </div>
+        </div>
+    </div>
+</app-modal>

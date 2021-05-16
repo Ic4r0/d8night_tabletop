@@ -1,0 +1,58 @@
+<div class="page page-with-footer uk-light">
+
+  <!-- BREADCRUMB -->
+  <app-breadcrumb [list]="breadcrumb"></app-breadcrumb>
+
+  <div class="uk-search uk-search-default uk-align-center uk-margin-small uk-width-5-6 uk-width-3-4@s uk-width-1-3@m">
+    <span class="uk-search-icon-flip" uk-search-icon></span>
+    <input class="uk-search-input uk-border-rounded" type="search" placeholder="Search..." (keyup)="inputFilter($event, 'search')">
+  </div>
+
+  <button class="uk-align-center uk-margin-small-top uk-width-5-6 uk-width-3-4@s uk-width-1-3@m uk-button uk-button-default uk-border-rounded" routerLink="/campaigns/new">
+    <span uk-icon="plus-circle" class="uk-margin-small-right"></span> New campaign
+  </button>
+
+  <div class="uk-margin-medium uk-width-5-6 uk-align-center">
+    <div class="master-filter uk-flex uk-flex-middle uk-flex-center uk-flex-right@s uk-margin-small-right">
+      <span class="uk-margin-small-right">I'm the Master:</span>
+      <a
+        (click)="activateMasterFilter()"
+        [ngClass]="{'uk-flex uk-flex-center uk-flex-middle': true, 'star-filter': !masterFilter, 'star-filter-selected': masterFilter}">
+        <span uk-icon="star"></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="uk-width-5-6 uk-width-3-4@s uk-align-center">
+    <div class="uk-flex uk-flex-column" *ngIf="campaignsListFiltered.length > 0">
+      <a *ngFor="let campaign of campaignsListFiltered | paginate: { itemsPerPage: 5, currentPage: page }" [routerLink]="'/campaigns/' + campaign.id" (click)="selectCampaign(campaign)">
+        <div class="uk-card uk-card-default uk-card-body uk-border-rounded uk-flex uk-flex-middle uk-width-1-1 uk-margin-small-bottom">
+          <img class="uk-border-circle uk-height-small uk-margin-medium-right uk-visible@s" [src]="campaignsImageUrl[campaign.id] | async" alt="">
+          <div>
+            <h3 class="uk-card-title">{{campaign.name}}</h3>
+            <p>Master: <i>{{campaign.master.displayName}}</i></p>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="uk-flex uk-flex-between uk-flex-middle uk-flex-wrap light-pagination">
+      <span class="uk-width-1-1 uk-width-auto@m uk-flex uk-flex-center uk-margin-small-top">
+        {{campaignsListFiltered.length}} result{{campaignsListFiltered.length === 1 ? '' : 's'}}
+      </span>
+      <pagination-controls
+        *ngIf="campaignsListFiltered.length > 0"
+        class="uk-width-1-1 uk-width-auto@m uk-flex uk-flex-center uk-margin-small-top"
+        (pageChange)="page = $event"
+        previousLabel="Prev."
+        nextLabel="Next"
+        screenReaderPaginationLabel="Pagination"
+        screenReaderPageLabel="page"
+        screenReaderCurrentLabel="On page">
+      </pagination-controls>
+    </div>
+  </div>
+
+</div>
+
+<app-mobile-footer class="uk-hidden@s" [buttons]="footerButtons" (label)="onFooterClicked($event)"></app-mobile-footer>

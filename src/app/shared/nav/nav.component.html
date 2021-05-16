@@ -1,0 +1,84 @@
+<!-- NAVBAR HOME: Inserire ngClass per togglare "uk-position-top" tra la home e il resto del sito -->
+<nav [ngClass]="{'uk-light uk-navbar-container': true, 'uk-position-top uk-navbar-transparent': isHome, 'navbar': !isHome}" uk-navbar>
+  <div class="uk-navbar-left">
+    <a class="uk-navbar-toggle uk-margin-small-left" uk-navbar-toggle-icon (click)="toggleNavbar()"></a>
+  </div>
+  <div class="uk-navbar-center">
+    <a routerLink="/home" class="uk-navbar-item uk-logo" (click)="toggleAuthCard()">d8 Night</a>
+  </div>
+  <div class="login-toggle uk-navbar-right">
+    <a *ngIf="user; else logOut" class="uk-margin-small-right" uk-tooltip="Sign out" (click)="showSignOutModal()">
+      <img class="uk-border-circle" [src]="user.photoURL" width="36" height="36">
+    </a>
+    <ng-template #logOut>
+      <a class="uk-icon-button uk-margin-small-right" uk-icon="google" uk-tooltip="Sign in" (click)="login()">
+      </a>
+    </ng-template>
+  </div>
+</nav>
+
+<div #offcanvasNav uk-offcanvas="overlay: true">
+  <div class="uk-offcanvas-bar">
+    <ul class="uk-nav uk-nav-default">
+      <li class="uk-nav-header">Home page</li>
+      <li [routerLinkActive]="'uk-active'" [routerLinkActiveOptions]="{exact: true}">
+        <a (click)="toggleNavbar()" routerLink="/home">
+          <span class="uk-margin-small-right" uk-icon="icon: home"></span>Home
+        </a>
+      </li>
+      <li *ngIf="isPlayer && cookieConsent" class="uk-nav-divider"></li>
+      <li *ngIf="isPlayer && cookieConsent" class="uk-nav-header">Let's play!</li>
+      <li *ngIf="isPlayer && cookieConsent" [routerLinkActive]="'uk-active'" [routerLinkActiveOptions]="{exact: false}">
+        <a (click)="toggleNavbar()" routerLink="/campaigns">
+          <span class="uk-margin-small-right" uk-icon="icon: copy"></span>Campaigns
+        </a>
+      </li>
+      <li *ngIf="isAdmin && cookieConsent" class="uk-nav-divider"></li>
+      <li *ngIf="isAdmin && cookieConsent" class="uk-nav-header">Settings</li>
+      <li *ngIf="isAdmin && cookieConsent" [routerLinkActive]="'uk-active'" [routerLinkActiveOptions]="{exact: true}">
+        <a (click)="toggleNavbar()" routerLink="/admin">
+          <span class="uk-margin-small-right" uk-icon="icon: settings"></span>Manage authorizations
+        </a>
+      </li>
+      <li *ngIf="isAdmin && cookieConsent" [routerLinkActive]="'uk-active'" [routerLinkActiveOptions]="{exact: true}">
+        <a (click)="toggleNavbar()" routerLink="/quotes">
+          <span class="uk-margin-small-right" uk-icon="icon: commenting"></span>Sidebar quotes
+        </a>
+      </li>
+      <li class="uk-nav-divider"></li>
+      <li class="uk-nav-header">Informations</li>
+      <li>
+        <a (click)="toggleNavbar()" routerLink="/privacy">
+          <span class="uk-margin-small-right" uk-icon="icon: file-text"></span>Cookies policy
+        </a>
+      </li>
+      <li>
+        <a (click)="toggleNavbar()" routerLink="/credits">
+          <span class="uk-margin-small-right" uk-icon="icon: info"></span>Credits
+        </a>
+      </li>
+      <li *ngIf="isPlayer" class="uk-nav-divider"></li>
+      <li *ngIf="isPlayer" class="uk-nav-header">{{user.displayName}}</li>
+      <li *ngIf="isPlayer">
+        <a (click)="toggleNavbar(); logout()">
+          <span class="uk-margin-small-right" uk-icon="icon: sign-out"></span>Sign out
+        </a>
+      </li>
+      <li class="uk-margin-large-top uk-text-small uk-text-center"><i>"{{chosenQuote}}"</i></li>
+      <li class="uk-margin-large-top uk-text-small uk-text-center uk-text-meta">v. 1.0.0</li>
+    </ul>
+  </div>
+</div>
+
+<app-modal [container]="false" [loading]="loading" #signOutModal>
+  <div *ngIf="user" class="uk-modal-body">
+    <button class="uk-modal-close-default" type="button" uk-close></button>
+    <p>Do you really want to sign out?</p>
+    <p class="uk-text-right">
+      <button class="uk-button uk-button-default uk-modal-close uk-border-rounded" type="button">Cancel</button>
+      <button class="uk-button uk-button-primary uk-border-rounded uk-margin-small-left" type="button" (click)="logout()">Sign out</button>
+    </p>
+  </div>
+</app-modal>
+
+<ng-content></ng-content>

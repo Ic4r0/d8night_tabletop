@@ -1,0 +1,122 @@
+<app-modal [container]="false" [loading]="loadingModal" #modal>
+  <div class="uk-modal-body" uk-overflow-auto>
+    <h2 class="uk-modal-title">Saving throws</h2>
+    <form [formGroup]="tempModifiers">
+      <div class="uk-flex uk-flex-center">
+        <table class="uk-table uk-table-small uk-table-middle uk-table-justify uk-table-divider uk-width-1-1">
+          <thead>
+            <tr>
+              <th class="uk-text-small name-col"></th>
+              <th class="uk-text-small uk-text-truncate uk-table-shrink" uk-tooltip="Total">Total</th>
+              <th class="uk-text-small uk-table-shrink" uk-tooltip="Base">Base</th>
+              <th class="uk-text-small uk-text-truncate uk-table-shrink uk-visible@s" uk-tooltip="Ability">Ability</th>
+              <th class="uk-text-small uk-table-shrink uk-visible@s" uk-tooltip="Misc">Misc</th>
+              <th class="uk-text-small uk-table-shrink" uk-tooltip="Temp">Temp</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="uk-text-small uk-text-uppercase uk-text-truncate">Fortitude</td>
+              <td class="uk-text-small uk-text-center">
+                {{
+                  saves['fortitude'].base +
+                  saves['fortitude'].modAbility +
+                  saves['fortitude'].feats +
+                  saves['fortitude'].modMagic +
+                  saves['fortitude'].modMisc +
+                  saves['fortitude'].race +
+                  saves['fortitude'].modTemp
+                }}
+              </td>
+              <td class="uk-text-small uk-text-center">{{ saves['fortitude'].base }}</td>
+              <td class="uk-text-small uk-text-center uk-visible@s">{{ saves['fortitude'].modAbility }}</td>
+              <td class="uk-text-small uk-text-center uk-visible@s">
+                {{
+                  saves['fortitude'].feats +
+                  saves['fortitude'].modMagic +
+                  saves['fortitude'].modMisc +
+                  saves['fortitude'].race
+                }}
+              </td>
+              <td>
+                <input class="uk-input uk-border-rounded" type="number" formControlName="fortitude"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-uppercase uk-text-truncate">Reflex</td>
+              <td class="uk-text-small uk-text-center">
+                {{
+                  saves['reflex'].base +
+                  saves['reflex'].modAbility +
+                  saves['reflex'].feats +
+                  saves['reflex'].modMagic +
+                  saves['reflex'].modMisc +
+                  saves['reflex'].race +
+                  saves['reflex'].modTemp
+                }}
+              </td>
+              <td class="uk-text-small uk-text-center">{{ saves['reflex'].base }}</td>
+              <td class="uk-text-small uk-text-center uk-visible@s">{{ saves['reflex'].modAbility }}</td>
+              <td class="uk-text-small uk-text-center uk-visible@s">
+                {{
+                  saves['reflex'].feats +
+                  saves['reflex'].modMagic +
+                  saves['reflex'].modMisc +
+                  saves['reflex'].race
+                }}
+              </td>
+              <td>
+                <input class="uk-input uk-border-rounded" type="number" formControlName="reflex"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="uk-text-small uk-text-uppercase uk-text-truncate">Will</td>
+              <td class="uk-text-small uk-text-center">
+                {{
+                  saves['will'].base +
+                  saves['will'].modAbility +
+                  saves['will'].feats +
+                  saves['will'].modMagic +
+                  saves['will'].modMisc +
+                  saves['will'].race +
+                  saves['will'].modTemp
+                }}
+              </td>
+              <td class="uk-text-small uk-text-center">{{ saves['will'].base }}</td>
+              <td class="uk-text-small uk-text-center uk-visible@s">{{ saves['will'].modAbility }}</td>
+              <td class="uk-text-small uk-text-center uk-visible@s">
+                {{
+                  saves['will'].feats +
+                  saves['will'].modMagic +
+                  saves['will'].modMisc +
+                  saves['will'].race
+                }}
+              </td>
+              <td>
+                <input class="uk-input uk-border-rounded" type="number" formControlName="will"/>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+    <div *ngIf="checkDifferences()" class="uk-margin-top uk-grid-small uk-child-width-1-2@s" uk-grid>
+      <div>
+        <button
+          class="uk-align-center uk-button uk-button-default uk-border-rounded uk-modal-close uk-width-1-1"
+          type="button"
+          (click)="resetTable()">
+          Cancel
+        </button>
+      </div>
+      <div>
+        <button
+          class="uk-align-center uk-button uk-button-primary uk-border-rounded uk-width-1-1"
+          type="button"
+          (click)="editSaves()">
+          Edit
+        </button>
+      </div>
+    </div>
+  </div>
+</app-modal>
