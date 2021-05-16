@@ -177,7 +177,7 @@ export class SingleCampaignComponent implements OnInit, OnDestroy {
   }
 
   setMaster() {
-    if (!!this.user && !!this.currentCampaign) {
+    if (!!this.user && !!this.currentCampaign && !!this.currentCampaign?.master) {
       this.isMaster = this.user.uid === this.currentCampaign.master.uid;
       if (this.currentCampaign.master.uid !== this.user.uid) {
         this.selectedPlayer = {...this.user};
@@ -195,12 +195,12 @@ export class SingleCampaignComponent implements OnInit, OnDestroy {
   }
 
   initializeSheetsListByPlayer() {
-    if (!!this.user && !!this.currentCampaign) {
+    if (!!this.user && !!this.currentCampaign && !!this.currentCampaign?.players) {
       this.sheetsListByPlayer = {};
       this.currentCampaign.players.forEach(({uid}) => {
         this.sheetsListByPlayer[uid] = [];
       });
-      if (Object.keys(this.currentCampaign.sheetSharing).length > 0) {
+      if (!!this.currentCampaign?.sheetSharing && Object.keys(this.currentCampaign.sheetSharing).length > 0) {
         const sheetsIdx = Object.keys(this.currentCampaign.sheetSharing);
         sheetsIdx.forEach((idx) => {
           const playerUID = this.currentCampaign.sheetSharing[idx].player.uid;
