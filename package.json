@@ -21,7 +21,7 @@
     "@angular/platform-browser": "~11.2.12",
     "@angular/platform-browser-dynamic": "~11.2.12",
     "@angular/router": "~11.2.12",
-    "@ng-select/ng-select": "^5.0.0",
+    "@ng-select/ng-select": "^6.1.0",
     "@ngrx/store": "^11.1.1",
     "@types/uikit": "^3.3.0",
     "cookieconsent": "^3.1.1",
