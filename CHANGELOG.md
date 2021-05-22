@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Now the campaign master can upload and share sheets for his/her players
 - Add info for the xml file needed for the character sheet upload in the upload modal
+- Add icons for *Add to Home Screen*
 ### Changed
 - Update `@ngrx/store` and `ngrx-store-localstorage`
 
