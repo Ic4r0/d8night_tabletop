@@ -8,7 +8,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [*[1.0.2] - 05/22/2021*](#[1.0.2]---2021-05-22)
 - [*[1.0.1] - 05/17/2021*](#[1.0.1]---2021-05-17)
 - [*[1.0.0] - 05/16/2021*](#[1.0.0]---2021-05-16)
-<!-- - [*[Template] - 05/16/2021*](#[Template]---05-16-2021) -->
 
 ## [Unreleased]
 ### TODO
@@ -31,11 +30,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2021-05-16
 ### Added
 - First *d8night-tabletop* release
-
-<!-- ## [Template] - 2021-05-16
-### Changed
-- To complete
-### Added
-- To complete
-### Fixed
-- To complete -->
