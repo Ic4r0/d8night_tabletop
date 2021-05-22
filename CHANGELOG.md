@@ -10,10 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <!-- - [*[Template] - 05/16/2021*](#[Template]---05-16-2021) -->
 
 ## [Unreleased]
-- 
-<!-- 
-## [TODO]
-- update `@ngrx/store` when a new version of `ngrx-store-localstorage` will be available -->
+### TODO
+- `@ngrx/store` has been force updated since [`ngrx-store-logger`](https://github.com/btroncone/ngrx-store-logger) has an incompatible peer dependency with it. Anyway, there is a pending PR that allows arbitrary future versions of `@ngrx/store`
+### Changed
+- Update `@ngrx/store` and `ngrx-store-localstorage`
 
 ## [1.0.1] - 2021-05-17
 ### Changed
