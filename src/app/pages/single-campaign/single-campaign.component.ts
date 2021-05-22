@@ -89,6 +89,10 @@ export class SingleCampaignComponent implements OnInit, OnDestroy {
     user: User,
     sharedWith: boolean,
   }[] = [];
+  playersAuthForSelectedSheetOriginal: {
+    user: User,
+    sharedWith: boolean,
+  }[] = [];
   classesList = [
     'Ranger',
     'Warpriest',
@@ -179,7 +183,8 @@ export class SingleCampaignComponent implements OnInit, OnDestroy {
   setMaster() {
     if (!!this.user && !!this.currentCampaign && !!this.currentCampaign?.master) {
       this.isMaster = this.user.uid === this.currentCampaign.master.uid;
-      if (this.currentCampaign.master.uid !== this.user.uid) {
+      const isMasterAndPlayer = this.currentCampaign.players.some(({uid}) => uid === this.user.uid) && this.isMaster;
+      if (this.currentCampaign.master.uid !== this.user.uid || isMasterAndPlayer) {
         this.selectedPlayer = {...this.user};
       } else {
         this.selectedPlayer = {...this.currentCampaign.players[0]};
@@ -399,8 +404,10 @@ export class SingleCampaignComponent implements OnInit, OnDestroy {
   uploadSheet() {
     this.loadingModal = true;
     const sheetId = uuidv4();
+    const sheetUser = this.isMaster ?
+      this.selectedPlayer : this.user;
     const sheetSharingInfo = {
-      player: this.user,
+      player: sheetUser,
       sharedWith: [],
       info: {
         name: this.loadedSheet.name,
@@ -413,18 +420,7 @@ export class SingleCampaignComponent implements OnInit, OnDestroy {
     };
     this.apiCampaign.addSheet(
       this.currentCampaign,
-      {
-        player: this.user,
-        sharedWith: [],
-        info: {
-          name: this.loadedSheet.name,
-          classes: this.loadedSheet.classes.map((singleClass) => ({
-            name: singleClass.name,
-            level: singleClass.level
-          })),
-          maxHp: this.loadedSheet.hp.maxHp
-        }
-      },
+      sheetSharingInfo,
       sheetId,
       this.loadedSheet
     ).pipe(
@@ -482,18 +478,20 @@ export class SingleCampaignComponent implements OnInit, OnDestroy {
   }
 
   shareSheet(sheetId: string) {
+    const sheetOwner = this.currentCampaign.sheetSharing[sheetId].player;
     this.selectedSheet = {
       sheetId,
-      player: {...this.currentCampaign.sheetSharing[sheetId].player},
+      player: {...sheetOwner},
       sharedWith: [...this.currentCampaign.sheetSharing[sheetId].sharedWith],
       info: {...this.currentCampaign.sheetSharing[sheetId].info}
     };
     this.playersAuthForSelectedSheet = this.currentCampaign.players
-      .filter(({uid}) => this.user.uid !== uid)
+      .filter(({uid}) => sheetOwner.uid !== uid)
       .map((singleUser) => ({
         user: singleUser,
         sharedWith: this.selectedSheet.sharedWith.some(({uid}) => uid === singleUser.uid)
       }));
+    this.playersAuthForSelectedSheetOriginal = [...this.playersAuthForSelectedSheet];
     this.shareSheetWithOthers.show();
   }
 
@@ -503,6 +501,17 @@ export class SingleCampaignComponent implements OnInit, OnDestroy {
         user,
         sharedWith: user.uid === userUid ? !sharedWith : sharedWith
       }));
+  }
+
+  disableShareUpdate() {
+    for (let idx = 0; idx < this.playersAuthForSelectedSheet.length; idx++) {
+      const currentValue = this.playersAuthForSelectedSheet[idx].sharedWith;
+      const originalValue = this.playersAuthForSelectedSheetOriginal[idx].sharedWith;
+      if (currentValue !== originalValue) {
+        return true;
+      }
+    }
+    return false;
   }
 
   resetSelectedSheet() {

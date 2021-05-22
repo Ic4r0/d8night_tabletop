@@ -12,7 +12,7 @@
             <h3 class="uk-card-title">{{currentCampaign.name}}</h3>
             <p>Master: <i>{{currentCampaign.master.displayName}}</i></p>
             <div class="uk-visible@s uk-flex uk-flex-middle uk-flex-right">
-              <a *ngIf="!isMaster" class="uk-icon-button uk-margin-small-right" uk-icon="upload" uk-tooltip="New sheet" (click)="addSheet()"></a>
+              <a class="uk-icon-button uk-margin-small-right" uk-icon="upload" uk-tooltip="New sheet" (click)="addSheet()"></a>
               <a *ngIf="isMaster" [routerLink]="'/campaigns/' + currentCampaign.id + '/edit'" class="uk-icon-button uk-margin-small-right" uk-icon="cog" uk-tooltip="Settings"></a>
               <a class="uk-icon-button" uk-icon="trash" uk-tooltip="Leave campaign" (click)="onLeaveCampaign()"></a>
             </div>
@@ -81,7 +81,7 @@
                       class="uk-icon-button"
                       uk-icon="social"
                       uk-tooltip="Share sheet"
-                      *ngIf="singleSheet.owned"
+                      *ngIf="singleSheet.owned || isMaster"
                       (click)="shareSheet(singleSheet.sheetId)"
                     ></a>
                   </td>
@@ -90,7 +90,7 @@
               <ng-template #noSheets>
                 <tbody>
                   <tr>
-                    <td>No sheet uploaded</td>
+                    <td>No sheets uploaded</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -172,6 +172,7 @@
       <div *ngIf="loadedSheet" class="uk-margin-top">
         <p class="uk-margin-remove-bottom">You are adding:</p>
         <ul class="uk-list uk-list-disc">
+          <li *ngIf="isMaster"><i>Player name:</i> {{selectedPlayer.displayName}}</li>
           <li><i>Name:</i> {{loadedSheet.name}}</li>
           <li><i>Level:</i> {{loadedSheet.level}}</li>
           <li><i>Class:</i> {{formatLoadedClasses(loadedSheet.classes)}}</li>
@@ -193,7 +194,7 @@
   <div class="uk-modal-body">
     <h3 class="uk-modal-title">Share {{ !!selectedSheet ? selectedSheet.info.name : '' }} sheet</h3>
     <div class="uk-card-body uk-flex uk-flex-center uk-flex-column" uk-overflow-auto>
-      <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-bottom">
+      <div *ngIf="playersAuthForSelectedSheet.length > 0; else notShareable" class="uk-flex uk-flex-between uk-flex-middle uk-margin-bottom">
         <span></span>
         <b>Authorize</b>
       </div>
@@ -204,8 +205,11 @@
           <div class="uk-switch-slider"></div>
         </span>
       </div>
+      <ng-template #notShareable>
+        <i>There are no other players in this campaign</i>
+      </ng-template>
     </div>
-    <div class="uk-margin-top uk-text-right">
+    <div *ngIf="disableShareUpdate()" class="uk-margin-top uk-text-right">
       <button class="uk-button uk-button-default uk-border-rounded uk-modal-close" type="button">
         Cancel
       </button>
