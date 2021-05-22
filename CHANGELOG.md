@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### TODO
 - `@ngrx/store` has been force updated since [`ngrx-store-logger`](https://github.com/btroncone/ngrx-store-logger) has an incompatible peer dependency with it. Anyway, there is a pending PR that allows arbitrary future versions of `@ngrx/store`
+### Added
+- Now the campaign master can upload and share sheets for his/her players
+- Add info for the xml file needed for the character sheet upload in the upload modal
 ### Changed
 - Update `@ngrx/store` and `ngrx-store-localstorage`
 
