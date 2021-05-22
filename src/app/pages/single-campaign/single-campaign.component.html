@@ -169,7 +169,7 @@
           </button>
         </div>
       </div>
-      <div *ngIf="loadedSheet" class="uk-margin-top">
+      <div *ngIf="!!loadedSheet; else noLoadedSheet" class="uk-margin-top">
         <p class="uk-margin-remove-bottom">You are adding:</p>
         <ul class="uk-list uk-list-disc">
           <li *ngIf="isMaster"><i>Player name:</i> {{selectedPlayer.displayName}}</li>
@@ -178,8 +178,20 @@
           <li><i>Class:</i> {{formatLoadedClasses(loadedSheet.classes)}}</li>
         </ul>
       </div>
+      <ng-template #noLoadedSheet>
+        <div class="uk-margin-top">
+          <p class="uk-margin-remove-bottom">How to retrieve from PCGen the file you have to upload here:</p>
+          <ul class="uk-list uk-list-disc">
+            <li>Click on export</li>
+            <li>Select the character you want to export</li>
+            <li>Export to Standard</li>
+            <li>Select the template <i>csheet_fantasy_generic_export.xml.ftl</i></li>
+            <li>Click on the Export button</li>
+          </ul>
+        </div>
+      </ng-template>
     </div>
-    <div class="uk-margin-top uk-text-right">
+    <div *ngIf="!!loadedSheet" class="uk-margin-top uk-text-right">
       <button class="uk-button uk-button-default uk-border-rounded uk-modal-close" type="button">
         Cancel
       </button>
